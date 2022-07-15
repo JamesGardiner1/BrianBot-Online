@@ -91,6 +91,9 @@ class dalle(commands.Cog):
     # Use decorator to wrap long-running blocking code
     @wrap
     def wait_for_loading(self, prompt):
+        dir_path = os.getcwd()
+        cogs_dir = os.path.dirname(dir_path)
+        master_dir = os.path.dirname(cogs_dir)
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 3 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
@@ -103,7 +106,7 @@ class dalle(commands.Cog):
         options.headless = True
 
         #initialise web driver
-        driver = webdriver.Firefox(executable_path=r'.\BrianBot-Online\Command_Executables\geckodriver\geckodriver.exe', options=options)
+        driver = webdriver.Firefox(executable_path=f'{master_dir}\Command_Executables\geckodriver\geckodriver.exe', options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
