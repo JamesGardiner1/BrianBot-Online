@@ -19,6 +19,11 @@ import asyncio
 import time
 from functools import wraps, partial
 
+dir_path = os.getcwd()
+cogs_dir = os.path.dirname(dir_path)
+master_dir = os.path.dirname(cogs_dir)
+geckodriver_dir = master_dir + 'Command_Executables\\geckodriver\\geckodriver.exe'
+
 class dalle(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -29,6 +34,11 @@ class dalle(commands.Cog):
         description="Generate images from a prompt using Dalle AI")
     
     async def dalle(self, interaction: discord.Interaction, prompt: str) -> None:
+
+        print(dir_path)
+        print(cogs_dir)
+        print(master_dir)
+        print(geckodriver_dir)
         
         if interaction.user.id in self.id_list:
             embed = discord.Embed(title="Please wait for your current DALL-E image to complete", color=discord.Color.from_rgb(255, 0, 0))
@@ -91,9 +101,6 @@ class dalle(commands.Cog):
     # Use decorator to wrap long-running blocking code
     @wrap
     def wait_for_loading(self, prompt):
-        dir_path = os.getcwd()
-        cogs_dir = os.path.dirname(dir_path)
-        master_dir = os.path.dirname(cogs_dir)
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 3 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
@@ -106,7 +113,7 @@ class dalle(commands.Cog):
         options.headless = True
 
         #initialise web driver
-        driver = webdriver.Firefox(executable_path=master_dir + 'Command_Executables\geckodriver\geckodriver.exe', options=options)
+        driver = webdriver.Firefox(executable_path=geckodriver_dir, options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
