@@ -103,7 +103,7 @@ class dalle(commands.Cog):
         options.headless = True
 
         #initialise web driver
-        driver = webdriver.Firefox(executable_path=r'E:\Uni Work\Discord Bots\BrianBotSlashCommands\Command_Executables\geckodriver\geckodriver.exe', options=options)
+        driver = webdriver.Firefox(executable_path=r'.\BrianBot-Online\Command_Executables\geckodriver\geckodriver.exe', options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
