@@ -2,6 +2,7 @@ import discord
 from discord import Interaction, app_commands
 from discord.ext import commands, tasks
 from selenium import webdriver
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -113,7 +114,7 @@ class dalle(commands.Cog):
         options.headless = True
 
         #initialise web driver
-        driver = webdriver.Firefox(executable_path=geckodriver_dir, options=options)
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
