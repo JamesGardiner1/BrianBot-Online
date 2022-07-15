@@ -22,7 +22,7 @@ from functools import wraps, partial
 dir_path = os.getcwd()
 cogs_dir = os.path.dirname(dir_path)
 master_dir = os.path.dirname(cogs_dir)
-geckodriver_dir = master_dir + 'Command_Executables\\geckodriver\\geckodriver.exe'
+geckodriver_dir = r'app\Command_Executables\geckodriver\geckodriver.exe'
 
 class dalle(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
