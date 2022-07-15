@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import BrianBotConfig as config
+import os
 
 class MyBot(commands.Bot):
     def __init__(self):
@@ -22,4 +23,4 @@ class MyBot(commands.Bot):
         print(f"{self.user} has conected to Discord!")
 
 bot = MyBot()
-bot.run(config.TOKEN)
+bot.run(os.environ["DISCORD_TOKEN"])

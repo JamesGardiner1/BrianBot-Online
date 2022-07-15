@@ -1,10 +1,8 @@
-from lib2to3.pgen2.token import OP
 import discord
 from discord import InteractionResponded, NotFound, app_commands, errors
 from discord.ext import commands
 import asyncio
 from typing import Optional
-from pyparsing import Opt
 import wavelink
 import datetime
 import BrianBotConfig as config
