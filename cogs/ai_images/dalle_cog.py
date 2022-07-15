@@ -92,6 +92,12 @@ class dalle(commands.Cog):
     # Use decorator to wrap long-running blocking code
     @wrap
     def wait_for_loading(self, prompt):
+        #Dalle Information
+        LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 3 minutes)...')]"
+        SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
+        RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
+        POPUP_REJECT_ALL = "//*[contains(text(), 'Reject All')]"
+
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         options = webdriver.FirefoxOptions()
@@ -104,7 +110,7 @@ class dalle(commands.Cog):
         driver.get("https://www.craiyon.com/")
 
         try:
-            element = WebDriverWait(driver, 2).until(ec.presence_of_element_located((By.XPATH, config.POPUP_REJECT_ALL)))
+            element = WebDriverWait(driver, 2).until(ec.presence_of_element_located((By.XPATH, POPUP_REJECT_ALL)))
             print("Popup found")
             driver.execute_script("arguments[0].click();", element)
             print("Popup rejected")
@@ -119,23 +125,23 @@ class dalle(commands.Cog):
         driver.find_element(By.ID, "prompt").send_keys(prompt)
         print("Prompt entered")
         #find website submit button and click
-        element = driver.find_element(By.XPATH, config.RUN_BUTTON)
+        element = driver.find_element(By.XPATH, RUN_BUTTON)
         print("Found run button")
         driver.execute_script("arguments[0].click();", element)
         print("Clicked run")
 
         # Loading element precense is checked to ensure generation has started.
         try:
-            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, config.LOADING_ELEMENT)))
+            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, LOADING_ELEMENT)))
             print("Loading element found.")
 
             # When loading element disappears we know generation has completed
-            WebDriverWait(driver, 180).until_not(ec.presence_of_element_located((By.XPATH, config.LOADING_ELEMENT)))
+            WebDriverWait(driver, 180).until_not(ec.presence_of_element_located((By.XPATH, LOADING_ELEMENT)))
             print("Loading stopped.")
 
             # Wait for screenshot button to become clickable and click. Then wait for download
-            WebDriverWait(driver, 10).until(ec.element_to_be_clickable((By.XPATH, config.SCREENSHOT_BUTTON)))
-            element = driver.find_element(By.XPATH, config.SCREENSHOT_BUTTON)
+            WebDriverWait(driver, 10).until(ec.element_to_be_clickable((By.XPATH, SCREENSHOT_BUTTON)))
+            element = driver.find_element(By.XPATH, SCREENSHOT_BUTTON)
             driver.execute_script("arguments[0].click();", element)
             print("Screenshot taken.")
             time.sleep(3)
