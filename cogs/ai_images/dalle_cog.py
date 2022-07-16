@@ -97,12 +97,13 @@ class dalle(commands.Cog):
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
         POPUP_REJECT_ALL = "//*[contains(text(), 'Reject All')]"
+        POPUP_AGREE = "//*[contains(text(), 'AGREE')]"
 
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         options = webdriver.ChromeOptions()
         options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        #options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--no-sandbox")
 
@@ -118,7 +119,7 @@ class dalle(commands.Cog):
         driver.get("https://www.craiyon.com/")
 
         try:
-            element = WebDriverWait(driver, 2).until(ec.presence_of_element_located((By.XPATH, POPUP_REJECT_ALL)))
+            element = WebDriverWait(driver, 2).until(ec.presence_of_element_located((By.XPATH, POPUP_AGREE)))
             print("Popup found")
             driver.execute_script("arguments[0].click();", element)
             print("Popup rejected")
