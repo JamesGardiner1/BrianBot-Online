@@ -56,10 +56,10 @@ class dalle(commands.Cog):
         # Get last sent message id so we can edit/delete when generation complete
         msg = await interaction.followup.send(embed=embed)
 
-        await self.wait_for_loading(prompt, image_name)
-
         # Generate unique image name based on author of command
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}"
+
+        await self.wait_for_loading(prompt, image_name)
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
         image_url = cloudinary.uploader.upload_image(image_name, folder="Dalle Images/", use_filename = True).url
