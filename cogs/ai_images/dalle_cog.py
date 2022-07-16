@@ -56,7 +56,7 @@ class dalle(commands.Cog):
         # Get last sent message id so we can edit/delete when generation complete
         msg = await interaction.followup.send(embed=embed)
 
-        await self.wait_for_loading(prompt)
+        await self.wait_for_loading(prompt, image_name)
 
         # Generate unique image name based on author of command
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}"
