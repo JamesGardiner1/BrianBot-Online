@@ -114,7 +114,7 @@ class dalle(commands.Cog):
         options.headless = True
 
         #initialise web driver
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
+        driver = webdriver.Firefox(executable_path=os.curdir + '/geckodriver.exe', options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
