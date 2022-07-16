@@ -93,7 +93,7 @@ class dalle(commands.Cog):
     @wrap
     def wait_for_loading(self, prompt):
         #Dalle Information
-        LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 3 minutes)...')]"
+        LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
         POPUP_REJECT_ALL = "//*[contains(text(), 'Reject All')]"
