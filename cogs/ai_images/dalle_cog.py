@@ -3,7 +3,7 @@ from discord import Interaction, app_commands
 from discord.ext import commands, tasks
 from selenium import webdriver
 #from selenium.webdriver.firefox.options import Options
-#from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -62,8 +62,10 @@ class dalle(commands.Cog):
         await self.wait_for_loading(prompt, image_name)
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
+
         image_url = cloudinary.uploader.upload_image(image_name, folder="Dalle Images/", use_filename = True).url
         os.remove(image_name)
+
         # Send embeded discord message with the generated IMG's URL 
         embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
         embed.set_footer(text="Website Link: https://www.craiyon.com")
@@ -89,35 +91,28 @@ class dalle(commands.Cog):
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
+        INPUT_FIELD = "prompt"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
-        POPUP_AGREE = '//*[@id="qc-cmp2-ui"]/div[2]/div/button[2]/span'
+        POPUP_REJECT_ALL = "/html/body/div[1]/div/div/div/div[2]/div/button[2]"
         SCREENSHOT_AREA = "/html/body/div[2]/div[1]/main/div[2]/div"
-        VIDEO_POPUP_EXIT = '//*[@id="av-close-btn"]'
+        VIDEO_POPUP_EXIT = "//*[@id='av-close-btn']"
 
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
-        options = webdriver.ChromeOptions()
-        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        options.add_argument("--headless")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--no-sandbox")
-
-        #options.headless = True
-        #user_agent = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16"
-        #options.add_argument("--no-sandbox")
-        #options.set_preference("general.useragent.override", user_agent)
+        options = webdriver.FirefoxOptions()
+        options.headless = True
 
         #initialise web driver
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=options)
+        driver = webdriver.Firefox(executable_path=r'E:\Uni Work\Discord Bots\BrianBotSlashCommands\Command_Executables\geckodriver\geckodriver.exe', options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
 
         try:
-            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, POPUP_AGREE)))
+            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, config.POPUP_REJECT_ALL)))
             print("Popup found")
             driver.execute_script("arguments[0].click();", element)
-            print("Popup accepted")
+            print("Popup rejected")
         except TimeoutException:
             print("Couldnt find popup menu in time")
         except ElementClickInterceptedException:
@@ -142,6 +137,14 @@ class dalle(commands.Cog):
             # When loading element disappears we know generation has completed
             WebDriverWait(driver, 180).until_not(ec.presence_of_element_located((By.XPATH, LOADING_ELEMENT)))
             print("Loading stopped.")
+
+            # Wait for screenshot button to become clickable and click. Then wait for download
+            WebDriverWait(driver, 10).until(ec.element_to_be_clickable((By.XPATH, SCREENSHOT_BUTTON)))
+            element = driver.find_element(By.XPATH, SCREENSHOT_BUTTON)
+            image = driver.execute_script("arguments[0].click();", element)
+            print(image)
+            print("Screenshot taken.")
+            time.sleep(3)
         except TimeoutException:
             return print("Could not find loading element in time.")
         except ElementClickInterceptedException:
@@ -160,6 +163,7 @@ class dalle(commands.Cog):
             print("Element Click Intercepted Exception Raised. POPUP VIDEO")
         except UnexpectedAlertPresentException:
             print("Unexpected Alert Present")
+        
 
         screenshot = driver.find_element(By.XPATH, SCREENSHOT_AREA)
         screenshot.screenshot(image_name)
