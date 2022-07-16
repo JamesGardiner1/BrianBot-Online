@@ -31,12 +31,6 @@ class dalle(commands.Cog):
         description="Generate images from a prompt using Dalle AI")
     
     async def dalle(self, interaction: discord.Interaction, prompt: str) -> None:
-
-        print(dir_path)
-        print(cogs_dir)
-        print(master_dir)
-        print(geckodriver_dir)
-        
         if interaction.user.id in self.id_list:
             embed = discord.Embed(title="Please wait for your current DALL-E image to complete", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.response.send_message(embed=embed)
