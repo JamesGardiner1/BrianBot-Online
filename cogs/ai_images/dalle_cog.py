@@ -90,13 +90,15 @@ class dalle(commands.Cog):
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
-        POPUP_AGREE = "/html/body/div[1]/div/div/div/div[2]/div/button[2]"
-        SCREENSHOT_AREA = "/html/body/div[2]/div[1]/main/div[2]/div"
-        VIDEO_POPUP_EXIT = "//*[@id='av-close-btn']"
+        POPUP_AGREE = '//*[@id="qc-cmp2-ui"]/div[2]/div/button[2]'
+        SCREENSHOT_AREA = '//*[@id="app"]/div/div/div[2]'
+        VIDEO_POPUP_EXIT = '//*[@id="av-close-btn"]'
 
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         options = webdriver.ChromeOptions()
+        capabilities = options.to_capabilities()
+        capabilities["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
         options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         options.add_argument("--headless")
         options.add_argument("--disable-dev-shm-usage")
