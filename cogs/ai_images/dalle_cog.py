@@ -21,6 +21,7 @@ import cloudinary.api
 import asyncio
 import time
 from functools import wraps, partial
+import regex
 
 class dalle(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
