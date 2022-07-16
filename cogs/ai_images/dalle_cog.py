@@ -97,8 +97,6 @@ class dalle(commands.Cog):
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         options = webdriver.ChromeOptions()
-        capabilities = options.to_capabilities()
-        capabilities["chromeOptions"]["excludeSwitches"] = ["disable-popup-blocking"]
         options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         options.add_argument("--headless")
         options.add_argument("--disable-dev-shm-usage")
