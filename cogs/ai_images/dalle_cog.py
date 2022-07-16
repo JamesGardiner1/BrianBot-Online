@@ -142,13 +142,6 @@ class dalle(commands.Cog):
             # When loading element disappears we know generation has completed
             WebDriverWait(driver, 180).until_not(ec.presence_of_element_located((By.XPATH, LOADING_ELEMENT)))
             print("Loading stopped.")
-
-            # Wait for screenshot button to become clickable and click. Then wait for download
-            WebDriverWait(driver, 10).until(ec.element_to_be_clickable((By.XPATH, SCREENSHOT_BUTTON)))
-            element = driver.find_element(By.XPATH, SCREENSHOT_BUTTON)
-            driver.execute_script("arguments[0].click();", element)
-            print("Screenshot taken.")
-            time.sleep(3)
         except TimeoutException:
             return print("Could not find loading element in time.")
         except ElementClickInterceptedException:
