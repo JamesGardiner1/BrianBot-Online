@@ -57,7 +57,7 @@ class dalle(commands.Cog):
         msg = await interaction.followup.send(embed=embed)
 
         # Generate unique image name based on author of command
-        image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}"
+        image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}.png"
 
         await self.wait_for_loading(prompt, image_name)
 
