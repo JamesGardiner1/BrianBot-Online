@@ -62,22 +62,16 @@ class dalle(commands.Cog):
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}"
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
-        path = 'C:/Users/james/Downloads/'
-        for i in os.listdir(path):
-            if i.startswith("craiyon_"):
-                os.rename(path + i, path + f"{image_name}")
-                image_url = cloudinary.uploader.upload_image(f"{path}{image_name}",
-                    folder="Dalle Images/",
-                    use_filename = True).url
-                os.remove(path + f"{image_name}")
-                # Send embeded discord message with the generated IMG's URL 
-                embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
-                embed.set_footer(text="Website Link: https://www.craiyon.com")
-                embed.set_image(url=image_url)
-                await interaction.followup.send(embed=embed)
-                self.id_list.remove(interaction.user.id)
-                embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
-                await msg.edit(embed=embed)
+        image_url = cloudinary.uploader.upload_image(image_name, folder="Dalle Images/", use_filename = True).url
+        os.remove(image_name)
+        # Send embeded discord message with the generated IMG's URL 
+        embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
+        embed.set_footer(text="Website Link: https://www.craiyon.com")
+        embed.set_image(url=image_url)
+        await interaction.followup.send(embed=embed)
+        self.id_list.remove(interaction.user.id)
+        embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
+        await msg.edit(embed=embed)
 
     # Wrap sync function in async decorator to run concurrently
     def wrap(func):
@@ -91,13 +85,14 @@ class dalle(commands.Cog):
 
     # Use decorator to wrap long-running blocking code
     @wrap
-    def wait_for_loading(self, prompt):
+    def wait_for_loading(self, prompt, image_name):
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
-        POPUP_REJECT_ALL = "//*[contains(text(), 'Reject All')]"
-        POPUP_AGREE = "//*[contains(text(), 'AGREE')]"
+        POPUP_AGREE = "/html/body/div[1]/div/div/div/div[2]/div/button[2]"
+        SCREENSHOT_AREA = "/html/body/div[2]/div[1]/main/div[2]/div"
+        VIDEO_POPUP_EXIT = "//*[@id='av-close-btn']"
 
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
@@ -119,10 +114,10 @@ class dalle(commands.Cog):
         driver.get("https://www.craiyon.com/")
 
         try:
-            element = WebDriverWait(driver, 2).until(ec.presence_of_element_located((By.XPATH, POPUP_AGREE)))
+            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, POPUP_AGREE)))
             print("Popup found")
             driver.execute_script("arguments[0].click();", element)
-            print("Popup rejected")
+            print("Popup accepted")
         except TimeoutException:
             print("Couldnt find popup menu in time")
         except ElementClickInterceptedException:
@@ -160,6 +155,21 @@ class dalle(commands.Cog):
             return print("Element Click Intercepted Exception Raised.")
         except UnexpectedAlertPresentException:
             return print("Unexpected Alart Present")
+
+        try:
+            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, VIDEO_POPUP_EXIT)))
+            print("Video popup found element found.")
+            driver.execute_script("arguments[0].click();", element)
+            print("Video popup closed")
+        except TimeoutException:
+            print("could not find video popup")
+        except ElementClickInterceptedException:
+            print("Element Click Intercepted Exception Raised. POPUP VIDEO")
+        except UnexpectedAlertPresentException:
+            print("Unexpected Alert Present")
+
+        screenshot = driver.find_element(By.XPATH, SCREENSHOT_AREA)
+        screenshot.screenshot(image_name)
 
         # close driver
         driver.close()
