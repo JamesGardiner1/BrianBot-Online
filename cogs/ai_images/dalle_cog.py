@@ -101,16 +101,27 @@ class dalle(commands.Cog):
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         options = webdriver.FirefoxOptions()
-        options.headless = True
+        
+        # enable trace level for debugging 
+        options.log.level = "trace"
 
-        #initialise web driver
-        driver = webdriver.Firefox(executable_path=r'E:\Uni Work\Discord Bots\BrianBotSlashCommands\Command_Executables\geckodriver\geckodriver.exe', options=options)
+        options.add_argument("-remote-debugging-port=9224")
+        options.add_argument("-headless")
+        options.add_argument("-disable-gpu")
+        options.add_argument("-no-sandbox")
+
+        binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+
+        driver = webdriver.Firefox(
+            firefox_binary=binary,
+            executable_path=os.environ.get('GECKODRIVER_PATH'),
+            options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
 
         try:
-            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, config.POPUP_REJECT_ALL)))
+            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, POPUP_REJECT_ALL)))
             print("Popup found")
             driver.execute_script("arguments[0].click();", element)
             print("Popup rejected")
