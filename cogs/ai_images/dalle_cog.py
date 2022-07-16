@@ -2,7 +2,8 @@ import discord
 from discord import Interaction, app_commands
 from discord.ext import commands, tasks
 from selenium import webdriver
-from webdriver_manager.firefox import GeckoDriverManager
+#from selenium.webdriver.firefox.options import Options
+#from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -19,11 +20,6 @@ import cloudinary.api
 import asyncio
 import time
 from functools import wraps, partial
-
-dir_path = os.getcwd()
-cogs_dir = os.path.dirname(dir_path)
-master_dir = os.path.dirname(cogs_dir)
-geckodriver_dir = r'app\Command_Executables\geckodriver\geckodriver.exe'
 
 class dalle(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -110,11 +106,19 @@ class dalle(commands.Cog):
 
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
-        options = webdriver.FirefoxOptions()
-        options.headless = True
+        options = webdriver.ChromeOptions()
+        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        options.add_argument("--headless")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+
+        #options.headless = True
+        #user_agent = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16"
+        #options.add_argument("--no-sandbox")
+        #options.set_preference("general.useragent.override", user_agent)
 
         #initialise web driver
-        driver = webdriver.Firefox(executable_path=os.curdir + '/geckodriver.exe', options=options)
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=options)
 
         #navigate to dalle page
         driver.get("https://www.craiyon.com/")
