@@ -1,6 +1,7 @@
 import discord
 from discord import Interaction, app_commands
 from discord.ext import commands, tasks
+from regex import E
 from selenium import webdriver
 #from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
