@@ -28,6 +28,7 @@ class dalle(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.id_list = []
+        self.cwd = os.getcwd()
     
     @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
     @app_commands.choices(artist=[
@@ -80,7 +81,7 @@ class dalle(commands.Cog):
     async def dalle(self, interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
         if interaction.user.id in self.id_list:
             embed = discord.Embed(title="Please wait for your current DALL-E image to complete", color=discord.Color.from_rgb(255, 0, 0))
-            return await interaction.response.send_message(embed=embed)
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             if artist is not None:
                 prompt += f", by {artist}"
@@ -110,18 +111,14 @@ class dalle(commands.Cog):
         # Generate unique image name based on author of command
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}.png"
 
-        cwd = os.getcwd()
-        print(f"{cwd}/{image_name}")
-
         await self.wait_for_loading(prompt)
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
-        cwd = os.getcwd()
-        for i in  os.listdir(cwd):
+        for i in  os.listdir(self.cwd):
             if i.startswith("craiyon_"):
-                os.rename(f"{cwd}/{i}", f"{cwd}/{image_name}")
-                image_url = cloudinary.uploader.upload_image(f"{cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
-                os.remove(f"{cwd}/{image_name}")
+                os.rename(f"{self.cwd}/{i}", f"{self.cwd}/{image_name}")
+                image_url = cloudinary.uploader.upload_image(f"{self.cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
+                os.remove(f"{self.cwd}/{image_name}")
 
         # Send embeded discord message with the generated IMG's URL 
         embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
@@ -156,7 +153,7 @@ class dalle(commands.Cog):
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         chrome_options = webdriver.ChromeOptions()
-        prefs = {'download.default_directory' : os.getcwd()}
+        prefs = {'download.default_directory' : f"{self.cwd}"}
         chrome_options.add_experimental_option('prefs', prefs)
         chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         chrome_options.add_argument("--headless")
