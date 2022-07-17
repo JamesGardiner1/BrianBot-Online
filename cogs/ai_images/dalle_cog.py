@@ -1,7 +1,8 @@
 import discord
 from discord import Interaction, app_commands
 from discord.ext import commands, tasks
-from regex import E
+from discord.app_commands import Choice
+from typing import Optional
 from selenium import webdriver
 #from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
@@ -28,15 +29,63 @@ class dalle(commands.Cog):
         self.bot = bot
         self.id_list = []
     
-    @app_commands.command(
-        name="dalle",
-        description="Generate images from a prompt using Dalle AI")
-    
-    async def dalle(self, interaction: discord.Interaction, prompt: str) -> None:
+    @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
+    @app_commands.choices(artist=[
+            Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
+            Choice(name="Michelangelo", value="Michelangelo"), 
+            Choice(name="Rembrandt", value="Rembrandt"),
+            Choice(name="Vermeer", value="Vermeer"),
+            Choice(name="Jean-Antoine Watteau", value="Jean-Antoine Watteau"),
+            Choice(name="Eugene Delacroix", value="Eugene Delacroix"),
+            Choice(name="Claude Monet", value="Claude Monet"),
+            Choice(name="Georges Seurat", value="Georges Seurat"),
+            Choice(name="Vincent van Gogh", value="Vincent van Gogh"),
+            Choice(name="Edvard Munch", value="Edvard Munch"),
+            Choice(name="Egon Schiele", value="Egon Schiele"),
+            Choice(name="Gustav Klimt", value="Gustav Klimt"),
+            Choice(name="Pablo Picasso", value="Pablo Picasso"),
+            Choice(name="Henri Matisse", value="Henri Matisse"),
+            Choice(name="Rene Magritte", value="Rene Magritte"),
+            Choice(name="Salvador Dalí", value="Salvador Dalí"),
+            Choice(name="Georgia O'Keeffe", value="Georgia O'Keeffe"),
+            Choice(name="Edward Hopper", value="Edward Hopper"),
+            Choice(name="Yoji Shinkawa", value="Yoji Shinkawa"),
+            Choice(name="Toshi Yoshida", value="Toshi Yoshida"),
+            Choice(name="Ivan Bilibin", value="Ivan Bilibin"),
+            Choice(name="Kuniyoshi", value="Kuniyoshi"),
+            ])
+    @app_commands.choices(style=[
+        Choice(name="Abstract Expressionism", value="Abstract Expressionism"),
+        Choice(name="Art Deco", value="Art Deco"),
+        Choice(name="Baroque", value="Baroque"),
+        Choice(name="Bauhaus", value="Bauhaus"),
+        Choice(name="Classicism", value="Classicism"),
+        Choice(name="Color Field Painting", value="Color Field Painting"),
+        Choice(name="Conceptual Art", value="Conceptual Art"),
+        Choice(name="Constructivism", value="Constructivism"),
+        Choice(name="Cubism", value="Cubism"),
+        Choice(name="Digital Art", value="Digital Art"),
+        Choice(name="Expressionism", value="Expressionism"),
+        Choice(name="Fauvism", value="Fauvism"),
+        Choice(name="Futurism", value="Futurism"),
+        Choice(name="Harlem Renaissance", value="Harlem Renaissance"),
+        Choice(name="Impressionism", value="Impressionism"),
+        Choice(name="Minimalism", value="Minimalism"),
+        Choice(name="Neo-Impressionism", value="Neo-Impressionism"),
+        Choice(name="Neoclassicism", value="Neoclassicism"),
+        Choice(name="Neon Art", value="Neon Art"),
+        Choice(name="Street Art", value="Street Art"),
+        Choice(name="Surrealism", value="Surrealism"),
+        ])
+    async def dalle(self, interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
         if interaction.user.id in self.id_list:
             embed = discord.Embed(title="Please wait for your current DALL-E image to complete", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.response.send_message(embed=embed)
         else:
+            if artist is not None:
+                prompt += f", by {artist}"
+            if style is not None:
+                prompt += f", in the style of {style}"
             self.id_list.append(interaction.user.id)
             await self.execute_dalle(interaction, prompt)
     
@@ -61,11 +110,13 @@ class dalle(commands.Cog):
         # Generate unique image name based on author of command
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}.png"
 
+        print(f"{os.getcwd}/{image_name}")
+
         await self.wait_for_loading(prompt, image_name)
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
 
-        image_url = cloudinary.uploader.upload_image(image_name, folder="Dalle Images/", use_filename = True).url
+        image_url = cloudinary.uploader.upload_image(f"{os.getcwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
         os.remove(image_name)
 
         # Send embeded discord message with the generated IMG's URL 
@@ -96,12 +147,13 @@ class dalle(commands.Cog):
         INPUT_FIELD = "prompt"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
         POPUP_REJECT_ALL = "/html/body/div[1]/div/div/div/div[2]/div/button[2]"
-        SCREENSHOT_AREA = "/html/body/div[2]/div[1]/main/div[2]/div"
         VIDEO_POPUP_EXIT = "//*[@id='av-close-btn']"
 
         #apply options to browser. Not currently used as headless causes program to crash
         #standard options work fine but window pops up when command runs
         chrome_options = webdriver.ChromeOptions()
+        prefs = {'download.default_directory' : os.getcwd()}
+        chrome_options.add_experimental_option('prefs', prefs)
         chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
@@ -158,14 +210,26 @@ class dalle(commands.Cog):
             print("Element Click Intercepted Exception Raised. POPUP VIDEO")
         except UnexpectedAlertPresentException:
             print("Unexpected Alert Present")
+
+        try:
+            element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, SCREENSHOT_BUTTON)))
+            driver.execute_script("arguments[0].click();", element)
+            time.sleep(3)
+            print("Screenshot taken")
+        except TimeoutException:
+            print("could not find screenshot button")
+        except ElementClickInterceptedException:
+            print("Element Click Intercepted Exception Raised. POPUP VIDEO")
+        except UnexpectedAlertPresentException:
+            print("Unexpected Alert Present")
         
 
         #element = driver.find_element(By.XPATH, SCREENSHOT_AREA)
         #element.screenshot(image_name)
-        element = driver.find_element(By.TAG_NAME, "body")
-        element.screenshot(image_name)
-        time.sleep(3)
-        print("Screenshot taken")
+        #element = driver.find_element(By.TAG_NAME, "body")
+        #element.screenshot(image_name)
+        #time.sleep(3)
+        #print("Screenshot taken")
 
         # close driver
         driver.close()
