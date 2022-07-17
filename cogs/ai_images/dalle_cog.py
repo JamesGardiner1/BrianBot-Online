@@ -162,7 +162,8 @@ class dalle(commands.Cog):
 
         #element = driver.find_element(By.XPATH, SCREENSHOT_AREA)
         #element.screenshot(image_name)
-        driver.save_screenshot(image_name)
+        element = driver.find_element(By.TAG_NAME, "body")
+        element.screenshot(image_name)
         time.sleep(3)
         print("Screenshot taken")
 
