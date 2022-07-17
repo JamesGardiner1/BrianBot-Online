@@ -113,12 +113,15 @@ class dalle(commands.Cog):
         cwd = os.getcwd()
         print(f"{cwd}/{image_name}")
 
-        await self.wait_for_loading(prompt, image_name)
+        await self.wait_for_loading(prompt)
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
-
-        image_url = cloudinary.uploader.upload_image(f"{os.getcwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
-        os.remove(image_name)
+        cwd = os.getcwd()
+        for i in  os.listdir(cwd):
+            if i.startswith("craiyon_"):
+                os.rename(f"{cwd}/{i}", f"{cwd}/{image_name}")
+                image_url = cloudinary.uploader.upload_image(f"{cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
+                os.remove(f"{cwd}/{image_name}")
 
         # Send embeded discord message with the generated IMG's URL 
         embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
@@ -141,7 +144,7 @@ class dalle(commands.Cog):
 
     # Use decorator to wrap long-running blocking code
     @wrap
-    def wait_for_loading(self, prompt, image_name):
+    def wait_for_loading(self, prompt):
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
@@ -223,14 +226,6 @@ class dalle(commands.Cog):
             print("Element Click Intercepted Exception Raised. POPUP VIDEO")
         except UnexpectedAlertPresentException:
             print("Unexpected Alert Present")
-        
-
-        #element = driver.find_element(By.XPATH, SCREENSHOT_AREA)
-        #element.screenshot(image_name)
-        #element = driver.find_element(By.TAG_NAME, "body")
-        #element.screenshot(image_name)
-        #time.sleep(3)
-        #print("Screenshot taken")
 
         # close driver
         driver.close()
