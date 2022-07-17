@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import aiohttp
-import BrianBotConfig as config
 import os
 
 class MyBot(commands.Bot):
@@ -17,7 +16,7 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.music.music_cog")
         #await self.load_extension(f"cogs.help.help_cog")
         await self.load_extension(f"cogs.nsfw.r34_cog")
-        await bot.tree.sync(guild=discord.Object(id=config.TEEF2_SERVER))
+        await bot.tree.sync()
     
     async def on_ready(self):
         print(f"{self.user} has conected to Discord!")

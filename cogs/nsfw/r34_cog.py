@@ -4,7 +4,6 @@ from discord.ext import commands
 import re
 import requests
 from bs4 import BeautifulSoup
-import BrianBotConfig as config
 import random
 
 class r34(commands.Cog):
@@ -62,4 +61,4 @@ class r34(commands.Cog):
             await interaction.response.send_message(f"No results for: {search}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(r34(bot), guilds=[discord.Object(id=config.TEEF2_SERVER)])
+    await bot.add_cog(r34(bot))

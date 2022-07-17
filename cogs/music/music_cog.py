@@ -5,7 +5,6 @@ import asyncio
 from typing import Optional
 import wavelink
 import datetime
-import BrianBotConfig as config
 
 class music(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -498,4 +497,4 @@ class music(commands.Cog):
             print("Message has already been responded too, couldnt send last part to discord channel")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(music(bot), guilds=[discord.Object(id=config.TEEF2_SERVER)])
+    await bot.add_cog(music(bot))

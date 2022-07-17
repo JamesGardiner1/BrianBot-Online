@@ -13,7 +13,6 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import ElementNotInteractableException
-import BrianBotConfig as config
 import os
 import uuid
 import cloudinary
@@ -229,4 +228,4 @@ class dalle(commands.Cog):
         print("Driver closed. DALL-E img generation complete.")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(dalle(bot), guilds=[discord.Object(id=config.TEEF2_SERVER)])
+    await bot.add_cog(dalle(bot))
