@@ -31,29 +31,29 @@ class dalle(commands.Cog):
     
     @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
     @app_commands.choices(artist=[
-            Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
-            Choice(name="Michelangelo", value="Michelangelo"), 
-            Choice(name="Rembrandt", value="Rembrandt"),
-            Choice(name="Vermeer", value="Vermeer"),
-            Choice(name="Jean-Antoine Watteau", value="Jean-Antoine Watteau"),
-            Choice(name="Eugene Delacroix", value="Eugene Delacroix"),
-            Choice(name="Claude Monet", value="Claude Monet"),
-            Choice(name="Georges Seurat", value="Georges Seurat"),
-            Choice(name="Vincent van Gogh", value="Vincent van Gogh"),
-            Choice(name="Edvard Munch", value="Edvard Munch"),
-            Choice(name="Egon Schiele", value="Egon Schiele"),
-            Choice(name="Gustav Klimt", value="Gustav Klimt"),
-            Choice(name="Pablo Picasso", value="Pablo Picasso"),
-            Choice(name="Henri Matisse", value="Henri Matisse"),
-            Choice(name="Rene Magritte", value="Rene Magritte"),
-            Choice(name="Salvador Dalí", value="Salvador Dalí"),
-            Choice(name="Georgia O'Keeffe", value="Georgia O'Keeffe"),
-            Choice(name="Edward Hopper", value="Edward Hopper"),
-            Choice(name="Yoji Shinkawa", value="Yoji Shinkawa"),
-            Choice(name="Toshi Yoshida", value="Toshi Yoshida"),
-            Choice(name="Ivan Bilibin", value="Ivan Bilibin"),
-            Choice(name="Kuniyoshi", value="Kuniyoshi"),
-            ])
+        Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
+        Choice(name="Michelangelo", value="Michelangelo"), 
+        Choice(name="Rembrandt", value="Rembrandt"),
+        Choice(name="Vermeer", value="Vermeer"),
+        Choice(name="Jean-Antoine Watteau", value="Jean-Antoine Watteau"),
+        Choice(name="Eugene Delacroix", value="Eugene Delacroix"),
+        Choice(name="Claude Monet", value="Claude Monet"),
+        Choice(name="Georges Seurat", value="Georges Seurat"),
+        Choice(name="Vincent van Gogh", value="Vincent van Gogh"),
+        Choice(name="Edvard Munch", value="Edvard Munch"),
+        Choice(name="Egon Schiele", value="Egon Schiele"),
+        Choice(name="Gustav Klimt", value="Gustav Klimt"),
+        Choice(name="Pablo Picasso", value="Pablo Picasso"),
+        Choice(name="Henri Matisse", value="Henri Matisse"),
+        Choice(name="Rene Magritte", value="Rene Magritte"),
+        Choice(name="Salvador Dalí", value="Salvador Dalí"),
+        Choice(name="Georgia O'Keeffe", value="Georgia O'Keeffe"),
+        Choice(name="Edward Hopper", value="Edward Hopper"),
+        Choice(name="Yoji Shinkawa", value="Yoji Shinkawa"),
+        Choice(name="Toshi Yoshida", value="Toshi Yoshida"),
+        Choice(name="Ivan Bilibin", value="Ivan Bilibin"),
+        Choice(name="Kuniyoshi", value="Kuniyoshi"),
+        ])
     @app_commands.choices(style=[
         Choice(name="Abstract Expressionism", value="Abstract Expressionism"),
         Choice(name="Art Deco", value="Art Deco"),
@@ -110,7 +110,8 @@ class dalle(commands.Cog):
         # Generate unique image name based on author of command
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}.png"
 
-        print(f"{os.getcwd}/{image_name}")
+        cwd = os.getcwd()
+        print(f"{cwd}/{image_name}")
 
         await self.wait_for_loading(prompt, image_name)
 
