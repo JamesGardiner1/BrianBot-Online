@@ -498,4 +498,4 @@ class music(commands.Cog):
             print("Message has already been responded too, couldnt send last part to discord channel")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(music(bot), guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+    await bot.add_cog(music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

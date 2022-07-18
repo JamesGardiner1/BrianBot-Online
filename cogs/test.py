@@ -12,4 +12,4 @@ class test(commands.Cog):
         await interaction.response.send_message(f"My name is: {name} and my age is: {age}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(test(bot), guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+    await bot.add_cog(test(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

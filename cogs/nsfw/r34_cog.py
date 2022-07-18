@@ -62,4 +62,4 @@ class r34(commands.Cog):
             await interaction.response.send_message(f"No results for: {search}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(r34(bot), guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+    await bot.add_cog(r34(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

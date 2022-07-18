@@ -48,4 +48,4 @@ class define(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(define(bot), guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+    await bot.add_cog(define(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
