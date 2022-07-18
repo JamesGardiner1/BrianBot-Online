@@ -1,11 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import aiohttp
-import BrianBotConfig as config
 import requests
 from bs4 import BeautifulSoup
-import re
 
 class define(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:

@@ -3,8 +3,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import aiohttp
-import BrianBotConfig as config
 import requests
+import os
 
 class deepai(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -31,7 +31,7 @@ class deepai(commands.Cog):
         try:
             r = requests.post("https://api.deepai.org/api/text2img",
                 data={'text': prompt},
-                headers={'api-key': 'cee54a56-e8e8-4dc4-86f4-cb7772582372'})
+                headers={'api-key': os.environ["DEEPAI_API_KEY"]})
 
             content = r.json()
             print(content)

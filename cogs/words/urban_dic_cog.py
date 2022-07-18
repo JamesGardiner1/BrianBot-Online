@@ -1,9 +1,6 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import aiohttp
-from regex import W
-import BrianBotConfig as config
 from typing import Optional
 import re
 import requests
