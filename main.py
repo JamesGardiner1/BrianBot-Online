@@ -12,10 +12,13 @@ class MyBot(commands.Bot):
     async def setup_hook(self):
         self.session = aiohttp.ClientSession()
         await self.load_extension(f"cogs.test")
+        await self.load_extension(f"cogs.words.define_cog")
+        await self.load_extension(f"cogs.words.urban_dic_cog")
         await self.load_extension(f"cogs.ai_images.dalle_cog")
         await self.load_extension(f"cogs.music.music_cog")
         #await self.load_extension(f"cogs.help.help_cog")
         await self.load_extension(f"cogs.nsfw.r34_cog")
+        await self.load_extension(f"cogs.ai_images.deepai_cog")
         await bot.tree.sync()
     
     async def on_ready(self):
