@@ -44,4 +44,4 @@ class UrbanDic(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(UrbanDic(bot), guild=discord.Object(id=TEEF2_SERVER))
+    await bot.add_cog(UrbanDic(bot), guilds=[discord.Object(id=TEEF2_SERVER)])
