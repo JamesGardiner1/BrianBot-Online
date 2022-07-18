@@ -18,7 +18,6 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.nsfw.r34_cog")
         await self.load_extension(f"cogs.ai_images.deepai_cog")
         await self.load_extension(f"cogs.ai_images.dalle_cog")
-        id = os.environ("DEVELOPMENT_SERVER_ID")
         await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
     
     async def on_ready(self):
