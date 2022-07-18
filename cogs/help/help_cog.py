@@ -1,8 +1,9 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import aiohttp
 from typing import Optional, Set
+
+TEEF2_SERVER = 749955516398305363
 
 class MyHelpCommand(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
@@ -78,4 +79,4 @@ class help(commands.Cog, name="Help"):
         self.bot.help_command = self._original_help_command
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(help(bot))
+    await bot.add_cog(help(bot), guild=discord.Object(id=TEEF2_SERVER))

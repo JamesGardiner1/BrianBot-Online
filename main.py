@@ -3,6 +3,8 @@ from discord.ext import commands
 import aiohttp
 import os
 
+TEEF2_SERVER = 749955516398305363
+
 class MyBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='=',
@@ -19,7 +21,7 @@ class MyBot(commands.Bot):
         #await self.load_extension(f"cogs.help.help_cog")
         await self.load_extension(f"cogs.nsfw.r34_cog")
         await self.load_extension(f"cogs.ai_images.deepai_cog")
-        await bot.tree.sync()
+        await bot.tree.sync(guild=discord.Object(id=TEEF2_SERVER))
     
     async def on_ready(self):
         print(f"{self.user} has conected to Discord!")

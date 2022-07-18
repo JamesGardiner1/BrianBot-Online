@@ -6,6 +6,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+TEEF2_SERVER = 749955516398305363
+
 class UrbanDic(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -42,4 +44,4 @@ class UrbanDic(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(UrbanDic(bot))
+    await bot.add_cog(UrbanDic(bot), guild=discord.Object(id=TEEF2_SERVER))

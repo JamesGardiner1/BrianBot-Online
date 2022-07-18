@@ -1,7 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import aiohttp
+
+TEEF2_SERVER = 749955516398305363
 
 class test(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -12,4 +13,4 @@ class test(commands.Cog):
         await interaction.response.send_message(f"My name is: {name} and my age is: {age}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(test(bot))
+    await bot.add_cog(test(bot), guild=discord.Object(id=TEEF2_SERVER))

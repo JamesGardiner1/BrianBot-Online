@@ -2,9 +2,10 @@ from code import interact
 import discord
 from discord import app_commands
 from discord.ext import commands
-import aiohttp
 import requests
 import os
+
+TEEF2_SERVER = 749955516398305363
 
 class deepai(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -50,4 +51,4 @@ class deepai(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(deepai(bot))
+    await bot.add_cog(deepai(bot), guild=discord.Object(id=TEEF2_SERVER))

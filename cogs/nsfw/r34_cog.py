@@ -6,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 import random
 
+TEEF2_SERVER = 749955516398305363
+
 class r34(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -61,4 +63,4 @@ class r34(commands.Cog):
             await interaction.response.send_message(f"No results for: {search}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(r34(bot))
+    await bot.add_cog(r34(bot), guild=discord.Object(id=TEEF2_SERVER))

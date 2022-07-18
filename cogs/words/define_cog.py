@@ -4,6 +4,8 @@ from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
 
+TEEF2_SERVER = 749955516398305363
+
 class define(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -47,4 +49,4 @@ class define(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(define(bot))
+    await bot.add_cog(define(bot), guild=discord.Object(id=TEEF2_SERVER))
