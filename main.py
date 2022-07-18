@@ -8,6 +8,7 @@ class MyBot(commands.Bot):
         super().__init__(command_prefix='=',
                             intents=discord.Intents.all(),
                             application_id=987829603118759936)
+        self.synced = False
         
     async def setup_hook(self):
         self.session = aiohttp.ClientSession()
@@ -18,9 +19,11 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.nsfw.r34_cog")
         await self.load_extension(f"cogs.ai_images.deepai_cog")
         await self.load_extension(f"cogs.ai_images.dalle_cog")
-        await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
     
     async def on_ready(self):
+        if not self.synced:
+            await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+            self.synced = True
         print(f"{self.user} has conected to Discord!")
 
 bot = MyBot()
