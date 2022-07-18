@@ -43,4 +43,4 @@ class UrbanDic(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(UrbanDic(bot), guilds=[discord.Object(id=os.environ("DEVELOPMENT_SERVER_ID"))])
+    await bot.add_cog(UrbanDic(bot), guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))

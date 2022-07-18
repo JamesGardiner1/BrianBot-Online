@@ -228,4 +228,4 @@ class dalle(commands.Cog):
         print("Driver closed. DALL-E img generation complete.")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(dalle(bot))
+    await bot.add_cog(dalle(bot), guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
