@@ -4,8 +4,6 @@ from discord.ext import commands, tasks
 from discord.app_commands import Choice
 from typing import Optional
 from selenium import webdriver
-#from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -21,7 +19,6 @@ import cloudinary.api
 import asyncio
 import time
 from functools import wraps, partial
-import regex
 
 class dalle(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:

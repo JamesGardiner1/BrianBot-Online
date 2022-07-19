@@ -5,8 +5,6 @@ from discord.app_commands import Choice
 import os
 from typing import Optional
 from selenium import webdriver
-#from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -40,8 +38,8 @@ tree = app_commands.CommandTree(client)
 id_list = []
 cwd = os.getcwd()
 
-@tree.command(name="dalle2", description="Generate images from a prompt using Dalle AI", guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
-async def self(interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
+@tree.command(guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]), name="dalleNew", description="Generate images from a prompt using Dalle AI")
+async def dalle(interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
     global id_list, cwd
 
     if interaction.user.id in id_list:
@@ -81,7 +79,8 @@ async def execute_dalle(interaction: discord.Interaction, prompt: str):
 
     # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
     for i in  os.listdir(cwd):
-        if i.startswith("craiyon_") and i.endswith(f"{prompt.replace(' ', '_')}.png"):
+        if i.startswith("craiyon_"):
+            print(i)
             os.rename(f"{cwd}/{i}", f"{cwd}/{image_name}")
             image_url = cloudinary.uploader.upload_image(f"{cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
             os.remove(f"{cwd}/{image_name}")
