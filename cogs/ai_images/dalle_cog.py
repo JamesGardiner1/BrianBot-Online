@@ -25,8 +25,10 @@ class dalle(commands.Cog):
         self.bot = bot
         self.id_list = []
         self.cwd = os.getcwd()
+
     
-    @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
+    
+    @app_commands.AppCommand(name="dallenewtest", description="Generate images from a prompt using Dalle AI", guild_id=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
     @app_commands.choices(artist=[
         Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
         Choice(name="Michelangelo", value="Michelangelo"), 
