@@ -40,54 +40,7 @@ tree = app_commands.CommandTree(client)
 id_list = []
 cwd = os.getcwd()
 
-@tree.command(name="dalle", description="Generate images from a prompt using Dalle AI", guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
-@app_commands.choices(artist=[
-    Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
-    Choice(name="Michelangelo", value="Michelangelo"), 
-    Choice(name="Rembrandt", value="Rembrandt"),
-    Choice(name="Vermeer", value="Vermeer"),
-    Choice(name="Jean-Antoine Watteau", value="Jean-Antoine Watteau"),
-    Choice(name="Eugene Delacroix", value="Eugene Delacroix"),
-    Choice(name="Claude Monet", value="Claude Monet"),
-    Choice(name="Georges Seurat", value="Georges Seurat"),
-    Choice(name="Vincent van Gogh", value="Vincent van Gogh"),
-    Choice(name="Edvard Munch", value="Edvard Munch"),
-    Choice(name="Egon Schiele", value="Egon Schiele"),
-    Choice(name="Gustav Klimt", value="Gustav Klimt"),
-    Choice(name="Pablo Picasso", value="Pablo Picasso"),
-    Choice(name="Henri Matisse", value="Henri Matisse"),
-    Choice(name="Rene Magritte", value="Rene Magritte"),
-    Choice(name="Salvador Dalí", value="Salvador Dalí"),
-    Choice(name="Georgia O'Keeffe", value="Georgia O'Keeffe"),
-    Choice(name="Edward Hopper", value="Edward Hopper"),
-    Choice(name="Yoji Shinkawa", value="Yoji Shinkawa"),
-    Choice(name="Toshi Yoshida", value="Toshi Yoshida"),
-    Choice(name="Ivan Bilibin", value="Ivan Bilibin"),
-    Choice(name="Kuniyoshi", value="Kuniyoshi"),
-    ])
-@app_commands.choices(style=[
-    Choice(name="Abstract Expressionism", value="Abstract Expressionism"),
-    Choice(name="Art Deco", value="Art Deco"),
-    Choice(name="Baroque", value="Baroque"),
-    Choice(name="Bauhaus", value="Bauhaus"),
-    Choice(name="Classicism", value="Classicism"),
-    Choice(name="Color Field Painting", value="Color Field Painting"),
-    Choice(name="Conceptual Art", value="Conceptual Art"),
-    Choice(name="Constructivism", value="Constructivism"),
-    Choice(name="Cubism", value="Cubism"),
-    Choice(name="Digital Art", value="Digital Art"),
-    Choice(name="Expressionism", value="Expressionism"),
-    Choice(name="Fauvism", value="Fauvism"),
-    Choice(name="Futurism", value="Futurism"),
-    Choice(name="Harlem Renaissance", value="Harlem Renaissance"),
-    Choice(name="Impressionism", value="Impressionism"),
-    Choice(name="Minimalism", value="Minimalism"),
-    Choice(name="Neo-Impressionism", value="Neo-Impressionism"),
-    Choice(name="Neoclassicism", value="Neoclassicism"),
-    Choice(name="Neon Art", value="Neon Art"),
-    Choice(name="Street Art", value="Street Art"),
-    Choice(name="Surrealism", value="Surrealism"),
-    ])
+@tree.command(name="dalle2", description="Generate images from a prompt using Dalle AI", guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
 async def self(interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
     global id_list, cwd
 
