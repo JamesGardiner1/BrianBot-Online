@@ -241,3 +241,5 @@ def wait_for_loading(prompt):
     # close driver
     driver.close()
     print("Driver closed. DALL-E img generation complete.")
+
+client.run(os.environ["DISCORD_TOKEN"])
