@@ -22,7 +22,7 @@ import time
 from functools import wraps, partial
 import requests
 
-class AIImageGen(commands.GroupCog, name="aiimages"):
+class AIImageGen(commands.GroupCog, name="ai_images"):
     def __init__(self, bot: commands.Bot) -> None:
         self.id_list = []
         self.cwd = os.getcwd()
@@ -99,9 +99,9 @@ class AIImageGen(commands.GroupCog, name="aiimages"):
 
         #cloudinary account details for uploading images
         cloudinary.config( 
-            cloud_name = "dezhokgqf", 
-            api_key = "938882534535316", 
-            api_secret = "0uQ1JqTB-91nOqB4ekKmIi7uFZo" 
+            cloud_name = os.environ["CLOUD_NAME"], 
+            api_key = os.environ["API_KEY"], 
+            api_secret = os.environ["API_SECRET"] 
         )
 
         # Send embeded message to discord stating the image generation has started

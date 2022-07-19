@@ -6,7 +6,7 @@ import os
 class MyBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='=',
-                            intents=discord.Intents.all(),
+                            intents=discord.Intents.default(),
                             application_id=987829603118759936)
         
     async def setup_hook(self):
