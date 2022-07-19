@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import random
 import os
 
-class r34(commands.Cog):
+class Nsfw(commands.GroupCog, name="nsfw"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
@@ -62,4 +62,7 @@ class r34(commands.Cog):
             await interaction.response.send_message(f"No results for: {search}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(r34(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    # Global Sync
+    #await bot.add_cog(AIImageGen(bot))
+    # Private Sync
+    await bot.add_cog(Nsfw(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

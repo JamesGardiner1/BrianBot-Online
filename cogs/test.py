@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import os
 
-class test(commands.Cog):
+class Test(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
@@ -12,4 +12,7 @@ class test(commands.Cog):
         await interaction.response.send_message(f"My name is: {name} and my age is: {age}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(test(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    # Global Sync
+    #await bot.add_cog(Test(bot))
+    # Private Sync
+    await bot.add_cog(Test(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

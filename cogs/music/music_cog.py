@@ -7,10 +7,11 @@ import wavelink
 import datetime
 import os
 
-class music(commands.Cog):
+class Music(commands.GroupCog, name="music"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         bot.loop.create_task(self.create_nodes())
+        super().__init__()
     
     async def create_nodes(self):
         await self.bot.wait_until_ready()
@@ -45,7 +46,7 @@ class music(commands.Cog):
             pass
 
     @app_commands.command(name="join", description="Get Brian to join your current voice channel")
-    async def join(self, interaction: discord.Interaction, channel: Optional[discord.VoiceChannel]):
+    async def join_command(self, interaction: discord.Interaction, channel: Optional[discord.VoiceChannel]):
         node = wavelink.NodePool.get_node()
         player = node.get_player(interaction.user.guild)
 
@@ -61,7 +62,7 @@ class music(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="leave", description="Get Brian to leave his current voice channel")
-    async def leave(self, interaction: discord.Interaction):
+    async def leave_command(self, interaction: discord.Interaction):
         node = wavelink.NodePool.get_node()
         player = node.get_player(interaction.user.guild)
 
@@ -498,4 +499,7 @@ class music(commands.Cog):
             print("Message has already been responded too, couldnt send last part to discord channel")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    # Global Sync
+    #await bot.add_cog(AIImageGen(bot))
+    # Private Sync
+    await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
