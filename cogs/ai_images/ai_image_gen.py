@@ -20,6 +20,7 @@ import cloudinary.api
 import asyncio
 import time
 from functools import wraps, partial
+import requests
 
 class AIImageGen(commands.GroupCog, name="aiimages"):
     def __init__(self, bot: commands.Bot) -> None:
