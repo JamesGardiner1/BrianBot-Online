@@ -38,7 +38,7 @@ tree = app_commands.CommandTree(client)
 id_list = []
 cwd = os.getcwd()
 
-@tree.command(guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]), name="dalleNew", description="Generate images from a prompt using Dalle AI")
+@tree.command(guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]), name="dallenew", description="Generate images from a prompt using Dalle AI")
 async def dalle(interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
     global id_list, cwd
 
