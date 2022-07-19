@@ -25,8 +25,6 @@ class aclient(discord.Client):
     def __init__(self) -> None:
         super().__init__(intents=discord.Intents.all())
         self.synced = False
-        self.cwd = os.getcwd()
-        self.id_list = []
     
     async def on_ready(self):
         await self.wait_until_ready()
@@ -130,7 +128,7 @@ async def execute_dalle(interaction: discord.Interaction, prompt: str):
 
     # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
     for i in  os.listdir(cwd):
-        if i.startswith("craiyon_"):
+        if i.startswith("craiyon_") and i.endswith(f"{prompt.replace(' ', '_')}.png"):
             os.rename(f"{cwd}/{i}", f"{cwd}/{image_name}")
             image_url = cloudinary.uploader.upload_image(f"{cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
             os.remove(f"{cwd}/{image_name}")
