@@ -22,16 +22,16 @@ class MyBot(commands.Bot):
 
 bot = MyBot()
 
-@bot.command(name="globalcommandsync")
-async def global_sync_command(self, ctx: commands.Context):
+@bot.command(name="globalcmdsync")
+async def global_sync_command(ctx: commands.Context):
     if not ctx.author.id == 153945414683328513:
         return await ctx.send("You do not have permission to use this command.")
     guild = ctx.guild
     #await bot.tree.copy_global_to(guild=guild)
     print("yes this works")
 
-@bot.command(name="privatecommandsync")
-async def private_sync_command(self, ctx: commands.Context):
+@bot.command(name="privatecmdsync")
+async def private_sync_command(ctx: commands.Context):
     if not ctx.author.id == 153945414683328513:
         return await ctx.send("You do not have permission to use this command.")
     #await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
