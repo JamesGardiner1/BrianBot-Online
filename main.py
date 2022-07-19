@@ -42,7 +42,7 @@ tree = app_commands.CommandTree(client)
 id_list = []
 cwd = os.getcwd()
 
-@tree.command(name="dalle", description="Generate images from a prompt using Dalle AI", guild = discord.Object(id=749955516398305363))
+@tree.command(name="dalle", description="Generate images from a prompt using Dalle AI", guild = discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
 @app_commands.choices(artist=[
     Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
     Choice(name="Michelangelo", value="Michelangelo"), 
