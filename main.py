@@ -108,9 +108,9 @@ async def execute_dalle(interaction: discord.Interaction, prompt: str):
 
     #cloudinary account details for uploading images
     cloudinary.config( 
-        cloud_name = "dezhokgqf", 
-        api_key = "938882534535316", 
-        api_secret = "0uQ1JqTB-91nOqB4ekKmIi7uFZo" 
+        cloud_name = os.environ["CLOUD_NAME"], 
+        api_key = os.environ["API_KEY"], 
+        api_secret = os.environ["API_SECRET"] 
     )
 
     # Send embeded message to discord stating the image generation has started
@@ -173,7 +173,7 @@ def wait_for_loading(prompt):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
 
     #navigate to dalle page
     driver.get("https://www.craiyon.com/")
