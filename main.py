@@ -18,6 +18,7 @@ import cloudinary.uploader
 import cloudinary.api
 import asyncio
 from functools import wraps, partial
+import time
 
 class aclient(discord.Client):
     def __init__(self) -> None:
@@ -181,7 +182,7 @@ def wait_for_loading(prompt):
     try:
         element = WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, SCREENSHOT_BUTTON)))
         driver.execute_script("arguments[0].click();", element)
-        asyncio.sleep(3)
+        time.sleep(3)
         print("Screenshot taken")
     except TimeoutException:
         print("could not find screenshot button")
