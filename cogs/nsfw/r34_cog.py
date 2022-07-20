@@ -67,6 +67,6 @@ class Nsfw(commands.GroupCog, name="nsfw"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    #await bot.add_cog(AIImageGen(bot))
+    await bot.add_cog(Nsfw(bot))
     # Private Sync
-    await bot.add_cog(Nsfw(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    #await bot.add_cog(Nsfw(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

@@ -78,4 +78,7 @@ class help(commands.Cog, name="Help"):
         self.bot.help_command = self._original_help_command
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(help(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    # Global Sync
+    await bot.add_cog(MyHelpCommand(bot))
+    # Private Sync
+    #await bot.add_cog(MyHelpCommand(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

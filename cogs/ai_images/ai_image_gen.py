@@ -34,7 +34,6 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         print("AI Image Generation cog is now ready.")
     
     @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
-    @app_commands.guilds(discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
     @app_commands.choices(artist=[
         Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
         Choice(name="Michelangelo", value="Michelangelo"), 
@@ -271,7 +270,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    #await bot.add_cog(AIImageGen(bot))
+    await bot.add_cog(AIImageGen(bot))
 
     # Private Sync
-    await bot.add_cog(AIImageGen(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    #await bot.add_cog(AIImageGen(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
