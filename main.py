@@ -41,7 +41,7 @@ async def private_sync_command(ctx: commands.Context):
     await bot.load_extension(f"cogs.nsfw.r34_cog")
     await bot.load_extension(f"cogs.ai_images.ai_image_gen")
     await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
-    print("Private commands synces")
+    print("Private commands synced")
 
 @bot.command(name="removeallcmds")
 async def remove_all_commands(ctx: commands.Context):
