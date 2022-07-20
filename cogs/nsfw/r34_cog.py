@@ -11,6 +11,10 @@ class Nsfw(commands.GroupCog, name="nsfw"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Nsfw cog is now ready.")
+
     @app_commands.command(name="r34", description="Returns a random Rule 34 image")
     async def r34_command(self, interaction: discord.Interaction, *, search: str):
         """Returns a random image from r34 website.

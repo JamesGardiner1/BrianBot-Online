@@ -12,6 +12,10 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Dictionaries cog is now ready.")
+
     @app_commands.command(name="define", description="Brian returns the definition for your word")
     async def define(self, interaction: discord.Interaction, word: str) -> None:
         main_url = "https://www.dictionary.com/"

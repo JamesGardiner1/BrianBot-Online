@@ -12,10 +12,10 @@ class MyBot(commands.Bot):
     async def setup_hook(self):
         self.session = aiohttp.ClientSession()
         await self.load_extension(f"cogs.test")
-        await self.load_extension(f"cogs.words.dictionaries_cog")
-        await self.load_extension(f"cogs.music.music_cog")
-        await self.load_extension(f"cogs.nsfw.r34_cog")
-        await self.load_extension(f"cogs.ai_images.ai_image_gen")
+        #await self.load_extension(f"cogs.words.dictionaries_cog")
+        #await self.load_extension(f"cogs.music.music_cog")
+        #await self.load_extension(f"cogs.nsfw.r34_cog")
+        #await self.load_extension(f"cogs.ai_images.ai_image_gen")
     
     async def on_ready(self):
         print(f"{self.user} has conected to Discord!")
@@ -39,7 +39,7 @@ async def private_sync_command(ctx: commands.Context):
 async def remove_all_commands(ctx: commands.Context):
     if not ctx.author.id == 153945414683328513:
         return await ctx.reply("You do not have permission to use this command.")
-    await bot.recursively_remove_all_commands()
+    await bot.tree.remove_command()
 
 bot.run(os.environ["DISCORD_TOKEN"])
 

@@ -10,6 +10,10 @@ class Test(commands.Cog):
     @app_commands.command(name="introduce", description="Introduce yourself!")
     async def introduce(self, interaction: discord.Interaction, name: str, age: int) -> None:
         await interaction.response.send_message(f"My name is: {name} and my age is: {age}")
+    
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Test cog is now ready.")
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
