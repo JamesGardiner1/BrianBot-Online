@@ -7,7 +7,7 @@ class MyBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='=',
                             intents=discord.Intents.all(),
-                            application_id=987829603118759936)
+                            application_id=999392379272441876)
         
     async def setup_hook(self):
         self.session = aiohttp.ClientSession()
@@ -16,7 +16,7 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.music.music_cog")
         await self.load_extension(f"cogs.nsfw.r34_cog")
         await self.load_extension(f"cogs.ai_images.ai_image_gen")
-    
+        await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
     async def on_ready(self):
         print(f"{self.user} has conected to Discord!")
 
@@ -35,11 +35,6 @@ async def global_sync_command(ctx: commands.Context):
 async def private_sync_command(ctx: commands.Context):
     if not ctx.author.id == 153945414683328513:
         return await ctx.reply("You do not have permission to use this command.")
-    await bot.load_extension(f"cogs.test")
-    await bot.load_extension(f"cogs.words.dictionaries_cog")
-    await bot.load_extension(f"cogs.music.music_cog")
-    await bot.load_extension(f"cogs.nsfw.r34_cog")
-    await bot.load_extension(f"cogs.ai_images.ai_image_gen")
     await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
     print("Private commands synced")
 
