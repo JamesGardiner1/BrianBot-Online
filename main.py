@@ -39,7 +39,7 @@ async def private_sync_command(ctx: commands.Context):
 async def remove_all_commands(ctx: commands.Context):
     if not ctx.author.id == 153945414683328513:
         return await ctx.reply("You do not have permission to use this command.")
-    bot.recursively_remove_all_commands()
+    await bot.recursively_remove_all_commands()
 
 bot.run(os.environ["DISCORD_TOKEN"])
 
