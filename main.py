@@ -16,8 +16,8 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.music.music_cog")
         await self.load_extension(f"cogs.nsfw.r34_cog")
         await self.load_extension(f"cogs.ai_images.ai_image_gen")
-        await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
-        #await bot.tree.sync()
+        #await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+        await bot.tree.sync()
     async def on_ready(self):
         print(f"{self.user} has conected to Discord!")
 
