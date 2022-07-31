@@ -15,7 +15,7 @@ class Music(commands.GroupCog, name="music"):
     
     async def create_nodes(self):
         await self.bot.wait_until_ready()
-        await wavelink.NodePool.create_node(bot=self.bot, host="audio.alexanderof.xyz", port=2000, password="lavalink", region=None)
+        await wavelink.NodePool.create_node(bot=self.bot, host="lavalink.oops.wtf", port=443, password="www.freelavalink.ga", https=True)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -500,6 +500,6 @@ class Music(commands.GroupCog, name="music"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    await bot.add_cog(Music(bot))
+    #await bot.add_cog(Music(bot))
     # Private Sync
-    #await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

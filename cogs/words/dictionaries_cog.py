@@ -70,9 +70,9 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        word = soup.find("a", {"class": "word text-denim font-bold font-serif dark:text-fluorescent break-words text-3xl md:text-[2.75rem] md:leading-10"}).get_text()
-        definitions = soup.find("div", {"class": "meaning mb-4"}).get_text()
-        example = soup.find("div", {"class": "example italic mb-4"}).get_text()
+        word = soup.find("a", {"class": "word text-denim font-bold font-serif dark:text-fluorescent break-all text-3xl md:text-[2.75rem] md:leading-10"}).get_text()
+        definitions = soup.find("div", {"class": "break-words meaning mb-4"}).get_text()
+        example = soup.find("div", {"class": "break-words example italic mb-4"}).get_text()
         author = soup.find("div", {"class": "contributor font-bold"}).get_text()
 
         embed = discord.Embed(title=word)
@@ -84,6 +84,6 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    await bot.add_cog(Dictionaries(bot))
+    #await bot.add_cog(Dictionaries(bot))
     # Private Sync
-    #await bot.add_cog(Dictionaries(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    await bot.add_cog(Dictionaries(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

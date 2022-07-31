@@ -17,6 +17,6 @@ class Test(commands.Cog):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    await bot.add_cog(Test(bot))
+    #await bot.add_cog(Test(bot))
     # Private Sync
-    #await bot.add_cog(Test(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    await bot.add_cog(Test(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
