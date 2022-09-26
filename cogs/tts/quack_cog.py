@@ -89,7 +89,6 @@ class QuackTTS(commands.GroupCog, name="quack"):
     @app_commands.command(name="tts", description="Make Brian say whatever you want in a variety of voices")
     async def tts_command(self, interaction: discord.Interaction, voices: str, speech: str) -> None:
             voice_client, _ = await _get_or_create_voice_client(interaction)
-
             if self.is_available is True:
                 self.is_available = False
                 try:
@@ -98,7 +97,7 @@ class QuackTTS(commands.GroupCog, name="quack"):
                         await interaction.response.defer(thinking=True)
                         audio_data = await query_uberduck(speech, voices)
                         self.is_generating = True
-                        with tempfile.NamedTemporaryFile(suffix=".wav", dir=f"{self.cwd}\cogs\tts\quack_clips", delete=False) as wav_f:
+                        with tempfile.NamedTemporaryFile(suffix=".wav", dir=self.cwd, delete=False) as wav_f:
                             wav_f.write(audio_data.getvalue())
                             wav_f.flush()
                             print(wav_f.name)
