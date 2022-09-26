@@ -1,4 +1,3 @@
-from unicodedata import name
 import discord
 from discord import Interaction, app_commands
 from discord.ext import commands, tasks
@@ -270,6 +269,6 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    await bot.add_cog(AIImageGen(bot))
+    #await bot.add_cog(AIImageGen(bot))
     # Private Sync
-    #await bot.add_cog(AIImageGen(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    await bot.add_cog(AIImageGen(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
