@@ -75,7 +75,7 @@ async def _send_help(interaction: discord.Interaction):
     await interaction.response.send_message("See https://uberduck.ai/quack-help for instructions on using the bot commands. Make sure you enter a voice that exactly matches one of the listed voices.")
 
 
-class QuackTTS(commands.GroupCog, name="ai_images"):
+class QuackTTS(commands.GroupCog, name="quack"):
     def __init__(self, bot: commands.Bot) -> None:
         self.cwd = os.getcwd()
         self.bot = bot
