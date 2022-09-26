@@ -4,7 +4,7 @@
   <br>
 </h1>
 
-<h3 align=center>A personalised bot for music commands, AI image generation and more. Built with <a href=https://github.com/Rapptz/discord.py>discord.py</a></h3>
+<h3 align=center>A personalised bot for music commands, AI image and speech generation and more. Built with <a href=https://github.com/Rapptz/discord.py>discord.py</a></h3>
 
 <p align="center">
   <a href="#about">About</a>
@@ -14,7 +14,7 @@
 
 ## ❓ About
 
-BrianBot is a personal. ongoing project while I study computer science at university. BrianBot can be invited to your server, just use [this](https://discord.com/api/oauth2/authorize?client_id=987829603118759936&permissions=8&scope=bot%20applications.commands) link!
+BrianBot is a personal, ongoing project while I study computer science at university. BrianBot can be invited to your server, just use [this](https://discord.com/api/oauth2/authorize?client_id=987829603118759936&permissions=8&scope=bot%20applications.commands) link!
 An official BrianBot server will soon be created for anyone to join, but in the mean time please contact me on this GitHub page with any issues/concers/questions.
 
 ## ❗ Features
