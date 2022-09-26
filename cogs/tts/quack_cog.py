@@ -91,33 +91,37 @@ class QuackTTS(commands.GroupCog, name="quack"):
             voice_client, _ = await _get_or_create_voice_client(interaction)
             if self.is_available is True:
                 self.is_available = False
-                if voice_client:
-                    guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow())
-                    await interaction.response.defer(thinking=True)
-                    audio_data = await query_uberduck(speech, voices)
-                    self.is_generating = True
-                    with tempfile.NamedTemporaryFile(suffix=".wav", dir=self.cwd, delete=False) as wav_f:
-                        wav_f.write(audio_data.getvalue())
-                        wav_f.flush()
-                        print(wav_f.name)
-                        source = FFmpegPCMAudio(wav_f.name)
-                        voice_client.play(source, after=None)
-                        self.is_generating = False
-                        await interaction.followup.send("Speech generated. Playing now.")
+                try:
+                    if voice_client:
+                        guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow())
+                        await interaction.response.defer(thinking=True)
+                        audio_data = await query_uberduck(speech, voices)
+                        self.is_generating = True
+                        with tempfile.NamedTemporaryFile(suffix=".wav", dir=self.cwd, delete=False) as wav_f:
+                            wav_f.write(audio_data.getvalue())
+                            wav_f.flush()
+                            print(wav_f.name)
+                            source = FFmpegPCMAudio(wav_f.name)
+                            self.is_generating = False
+                            await interaction.followup.send("Speech generated. Playing now.")
 
-                    try:
-                        while voice_client.is_playing():
-                            print("Playing..")
-                            await asyncio.sleep(0.5)
-                    finally:
-                        print("Stopped.")
+                        try:
+                            voice_client.play(source, after=None)
+                            while voice_client.is_playing():
+                                print("Playing..")
+                                await asyncio.sleep(0.5)
+                        finally:
+                            print("Stopped.")
+                            self.is_available = True
+                            os.remove(wav_f.name)
+                            voice_client, _ = guild_to_voice_client.pop(interaction.guild.id)
+                            await voice_client.disconnect()
+
+                    else:
+                        await interaction.followup.send("You're not in a voice channel. Join a voice channel to invite the bot!", ephemeral=True)
                         self.is_available = True
-                        os.remove(wav_f.name)
-                        voice_client, _ = guild_to_voice_client.pop(interaction.guild.id)
-                        await voice_client.disconnect()
-
-                else:
-                    await interaction.followup.send("You're not in a voice channel. Join a voice channel to invite the bot!", ephemeral=True)
+                except Exception as e:
+                    await interaction.followup.send(f"Encountered Error. {e}")
                     self.is_available = True
             else:
                 await interaction.response.send_message("Brians TTS is currently in use.")
