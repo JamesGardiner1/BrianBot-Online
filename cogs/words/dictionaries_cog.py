@@ -84,6 +84,6 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    await bot.add_cog(Dictionaries(bot))
+    #await bot.add_cog(Dictionaries(bot))
     # Private Sync
-    #await bot.add_cog(Dictionaries(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    await bot.add_cog(Dictionaries(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
