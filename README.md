@@ -4,7 +4,7 @@
   <br>
 </h1>
 
-<h3 align=center>A personalised bot for music commands, AI image generation and more. Build with <a href=https://github.com/Rapptz/discord.py>discord.py</a></h3>
+<h3 align=center>A personalised bot for music commands, AI image generation and more. Built with <a href=https://github.com/Rapptz/discord.py>discord.py</a></h3>
 
 <p align="center">
   <a href="#about">About</a>
@@ -19,11 +19,13 @@ An official BrianBot server will soon be created for anyone to join, but in the 
 
 ## ❗ Features
 
-**3** command categories containing a variety of commands
+**5** command categories containing a variety of commands
 
-*   🖼  **Image**: `dalle`
+*   🖼  **AI Images**: `dalle`, `deepai`
 *   🎵  **Music**: `play`, `queue`, `seek`, `search`, `volume`, `loop` and many more!
 *   🔞  **NSFW**: `r34`
+*   🗣️  **Quack**: `tts`, `help`
+*   📚  **Dictionaries**: `define`, `urban_define`
 
 BrianBot has been built on top of the new [Discord Slash Commands](https://discord.com/blog/slash-commands-are-here) for an easy to use interface.
 
