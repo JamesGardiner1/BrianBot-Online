@@ -1,4 +1,5 @@
 <h1 align="center">
+  <img src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/BrianBotProfile.png?raw=true" alt="BrianBot Profile" width="256" height="256">
   <br>
   BrianBot
   <br>
