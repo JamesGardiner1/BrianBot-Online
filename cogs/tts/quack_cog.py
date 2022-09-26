@@ -136,6 +136,6 @@ class QuackTTS(commands.GroupCog, name="quack"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    #await bot.add_cog(QuackTTS(bot))
+    await bot.add_cog(QuackTTS(bot))
     # Private Sync
-    await bot.add_cog(QuackTTS(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    #await bot.add_cog(QuackTTS(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

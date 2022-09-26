@@ -500,6 +500,6 @@ class Music(commands.GroupCog, name="music"):
 
 async def setup(bot: commands.Bot) -> None:
     # Global Sync
-    #await bot.add_cog(Music(bot))
+    await bot.add_cog(Music(bot))
     # Private Sync
-    await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    #await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
