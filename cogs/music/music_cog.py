@@ -303,7 +303,7 @@ class Music(commands.GroupCog, name="music"):
                 return await interaction.followup.send(embed=embed)
 
     @app_commands.command(name="seek", description="Jump to a specific point in the track. Format: hh:mm:ss")
-    async def seek_command(self, interaction: discord.Interaction, timestamp: Optional[str], current: Optional[bool]):
+    async def seek_command(self, interaction: discord.Interaction, timestamp: Optional[str], hour: int, minute: int, second: int, current: Optional[bool]):
         """Skips to a timestamp within the current track.
 
         Supported formats:
@@ -326,31 +326,31 @@ class Music(commands.GroupCog, name="music"):
             embed = discord.Embed(title="No track currently playing", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.response.send_message(embed=embed)
 
-        hours = 0
-        minutes = 0
-        seconds = 0
+        hours = hour
+        minutes = minute
+        seconds = second
 
         if current is True:
             embed = discord.Embed(title=f"Current time stamp is: `{str(datetime.timedelta(seconds=(int(player.position))))}`", 
                                     color=discord.Color.from_rgb(0, 255, 0))
             return await interaction.response.send_message(embed=embed)
 
-        timestamp = timestamp.split(":")
+        #timestamp = timestamp.split(":")
 
-        if len(timestamp) == 1:
-            seconds = int(timestamp[0]) % (24 * 3600)
-            hours = seconds // 3600
-            seconds %= 3600
-            minutes = seconds // 60
-            seconds %= 60
-        elif len(timestamp) == 2:
-            minutes = int(timestamp[0])
-            seconds = int(timestamp[1])
-            hours = 0
-        elif len(timestamp) == 3:
-            hours = int(timestamp[0])
-            minutes = int(timestamp[1])
-            seconds = int(timestamp[2])
+        #if len(timestamp) == 1:
+        #    seconds = int(timestamp[0]) % (24 * 3600)
+        #    hours = seconds // 3600
+        #    seconds %= 3600
+        #    minutes = seconds // 60
+        #    seconds %= 60
+        #elif len(timestamp) == 2:
+        #    minutes = int(timestamp[0])
+        #    seconds = int(timestamp[1])
+        #    hours = 0
+        #elif len(timestamp) == 3:
+        #    hours = int(timestamp[0])
+        #    minutes = int(timestamp[1])
+        #    seconds = int(timestamp[2])
 
         if hours is not None and hours < 0:
             embed = discord.Embed(name=f"Hours should be above 0", 
