@@ -10,6 +10,7 @@ import asyncio
 import aiohttp
 from datetime import datetime, timedelta
 import os
+from main import GLOBAL_SYNC
 
 API_ROOT = 'https://api.uberduck.ai'
 
@@ -71,10 +72,6 @@ async def _get_or_create_voice_client(ctx: discord.Interaction):
 def _context_to_voice_channel(interaction: discord.Interaction):
     return interaction.user.voice.channel if interaction.user.voice else None
 
-async def _send_help(interaction: discord.Interaction):
-    await interaction.response.send_message("See https://uberduck.ai/quack-help for instructions on using the bot commands. Make sure you enter a voice that exactly matches one of the listed voices.")
-
-
 class QuackTTS(commands.GroupCog, name="quack"):
     def __init__(self, bot: commands.Bot) -> None:
         self.cwd = os.getcwd()
@@ -84,7 +81,7 @@ class QuackTTS(commands.GroupCog, name="quack"):
     
     @commands.Cog.listener()
     async def on_ready(self):
-        print("QuackTTS cog is now ready.")
+        print(f"QuackTTS cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
     @app_commands.command(name="tts", description="Make Brian say whatever you want in a variety of voices")
     async def tts_command(self, interaction: discord.Interaction, voices: str, speech: str) -> None:
@@ -135,7 +132,9 @@ class QuackTTS(commands.GroupCog, name="quack"):
         await interaction.response.send_message(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
-    # Global Sync
-    #await bot.add_cog(QuackTTS(bot))
-    # Private Sync
-    await bot.add_cog(QuackTTS(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(QuackTTS(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(QuackTTS(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

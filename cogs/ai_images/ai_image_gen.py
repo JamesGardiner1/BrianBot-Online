@@ -20,6 +20,7 @@ import asyncio
 import time
 from functools import wraps, partial
 import requests
+from main import GLOBAL_SYNC
 
 class AIImageGen(commands.GroupCog, name="ai_images"):
     def __init__(self, bot: commands.Bot) -> None:
@@ -30,7 +31,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("AI Image Generation cog is now ready.")
+        print(f"AI Image Generation cog is now ready. Synced Globally: {GLOBAL_SYNC}")
     
     @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
     @app_commands.choices(artist=[
@@ -268,7 +269,9 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         await msg.edit(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
-    # Global Sync
-    #await bot.add_cog(AIImageGen(bot))
-    # Private Sync
-    await bot.add_cog(AIImageGen(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(AIImageGen(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(AIImageGen(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

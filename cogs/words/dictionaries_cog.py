@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import os
 from typing import Optional
 import re
+from main import GLOBAL_SYNC
 
 class Dictionaries(commands.GroupCog, name="dictionaries"):
     def __init__(self, bot: commands.Bot) -> None:
@@ -14,7 +15,7 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Dictionaries cog is now ready.")
+        print(f"Dictionaries cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
     @app_commands.command(name="define", description="Brian returns the definition for your word")
     async def define(self, interaction: discord.Interaction, word: str) -> None:
@@ -83,7 +84,9 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
         await interaction.response.send_message(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
-    # Global Sync
-    #await bot.add_cog(Dictionaries(bot))
-    # Private Sync
-    await bot.add_cog(Dictionaries(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(Dictionaries(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(Dictionaries(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

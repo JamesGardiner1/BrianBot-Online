@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import random
 import os
+from main import GLOBAL_SYNC
 
 class Nsfw(commands.GroupCog, name="nsfw"):
     def __init__(self, bot: commands.Bot) -> None:
@@ -13,7 +14,7 @@ class Nsfw(commands.GroupCog, name="nsfw"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Nsfw cog is now ready.")
+        print(f"NSFW cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
     @app_commands.command(name="r34", description="Returns a random Rule 34 image")
     async def r34_command(self, interaction: discord.Interaction, *, search: str):
@@ -66,7 +67,9 @@ class Nsfw(commands.GroupCog, name="nsfw"):
             await interaction.response.send_message(f"No results for: {search}")
 
 async def setup(bot: commands.Bot) -> None:
-    # Global Sync
-    #await bot.add_cog(Nsfw(bot))
-    # Private Sync
-    await bot.add_cog(Nsfw(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(Nsfw(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(Nsfw(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

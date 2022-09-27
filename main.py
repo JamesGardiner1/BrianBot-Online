@@ -3,6 +3,8 @@ from discord.ext import commands
 import aiohttp
 import os
 
+GLOBAL_SYNC = True
+
 class MyBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='=',
@@ -17,10 +19,13 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.nsfw.r34_cog")
         await self.load_extension(f"cogs.ai_images.ai_image_gen")
         await self.load_extension(f"cogs.tts.quack_cog")
-        await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
-        #await bot.tree.sync()
+        if GLOBAL_SYNC:
+            await bot.tree.sync()
+        else:
+            await bot.tree.sync(guild=discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"]))
+        #
     async def on_ready(self):
-        print(f"{self.user} has conected to Discord!")
+        print(f"{self.user} has conected to Discord! Synced Globally: {GLOBAL_SYNC}")
 
 bot = MyBot()
 

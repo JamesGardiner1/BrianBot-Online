@@ -6,6 +6,7 @@ from typing import Optional
 import wavelink
 import datetime
 import os
+from main import GLOBAL_SYNC
 
 class Music(commands.GroupCog, name="music"):
     def __init__(self, bot: commands.Bot) -> None:
@@ -19,7 +20,7 @@ class Music(commands.GroupCog, name="music"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Music cog is now ready.")
+        print(f"Music cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
     @commands.Cog.listener()
     async def on_wavelink_node_ready(self, node: wavelink.Node):
@@ -499,7 +500,9 @@ class Music(commands.GroupCog, name="music"):
             print("Message has already been responded too, couldnt send last part to discord channel")
 
 async def setup(bot: commands.Bot) -> None:
-    # Global Sync
-    #await bot.add_cog(Music(bot))
-    # Private Sync
-    await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(Music(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(Music(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])

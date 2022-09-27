@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 from typing import Optional, Set
 import os
+from main import GLOBAL_SYNC
 
 class MyHelpCommand(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
@@ -73,12 +74,18 @@ class help(commands.Cog, name="Help"):
         self._original_help_command = bot.help_command
         bot.help_command = MyHelpCommand()
         bot.help_command.cog = self
+    
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"MyHelpCommand cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
     def cog_unload(self):
         self.bot.help_command = self._original_help_command
 
 async def setup(bot: commands.Bot) -> None:
-    # Global Sync
-    #await bot.add_cog(MyHelpCommand(bot))
-    # Private Sync
-    await bot.add_cog(MyHelpCommand(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(MyHelpCommand(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(MyHelpCommand(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
