@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 import os
 from typing import Optional
 import re
-from main import GLOBAL_SYNC
+
+GLOBAL_SYNC = True
 
 class Dictionaries(commands.GroupCog, name="dictionaries"):
     def __init__(self, bot: commands.Bot) -> None:

@@ -10,7 +10,8 @@ import asyncio
 import aiohttp
 from datetime import datetime, timedelta
 import os
-from main import GLOBAL_SYNC
+
+GLOBAL_SYNC = True
 
 API_ROOT = 'https://api.uberduck.ai'
 

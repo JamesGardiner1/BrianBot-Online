@@ -2,7 +2,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import os
-from main import GLOBAL_SYNC
+
+GLOBAL_SYNC = True
 
 class Test(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:

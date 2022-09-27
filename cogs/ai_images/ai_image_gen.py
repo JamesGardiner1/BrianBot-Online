@@ -20,7 +20,8 @@ import asyncio
 import time
 from functools import wraps, partial
 import requests
-from main import GLOBAL_SYNC
+
+GLOBAL_SYNC = True
 
 class AIImageGen(commands.GroupCog, name="ai_images"):
     def __init__(self, bot: commands.Bot) -> None:
