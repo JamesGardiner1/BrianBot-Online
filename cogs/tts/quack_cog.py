@@ -100,7 +100,7 @@ class QuackTTS(commands.GroupCog, name="quack"):
             new_channel_name = voice_client.channel.name
             #add the users guild(server) to dictionary with the voice client and current time
             guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow())
-            await interaction.response.send_message(f"Switched from #{old_channel_name} to #{new_channel_name}")
+            await interaction.response.send_message(f"Switched from `#{old_channel_name}` to `#{new_channel_name}`")
         else:
             #send message add the users guild(server) to dictionary with the voice client and current time
             await interaction.response.send_message("Connected to a voice channel")
@@ -122,7 +122,7 @@ class QuackTTS(commands.GroupCog, name="quack"):
 
     @app_commands.command(name="tts", description="Make Brian say whatever you want in a variety of voices")
     async def tts_command(self, interaction: discord.Interaction, voices: str, speech: str) -> None:
-            voice_client, _ = await get_or_create_voice_client(interaction)
+            voice_client = await get_or_create_voice_client(interaction)
             
             if self.is_available is True:
                 self.is_available = False
