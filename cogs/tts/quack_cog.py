@@ -1,3 +1,4 @@
+from turtle import color
 import discord
 from discord import app_commands, FFmpegPCMAudio, errors
 from discord.ext import commands
@@ -16,7 +17,6 @@ GLOBAL_SYNC = True
 API_ROOT = 'https://api.uberduck.ai'
 
 guild_to_voice_client = dict()
-generating = False
 
 async def query_uberduck(text, voice):
     max_time = 60
@@ -47,30 +47,26 @@ async def query_uberduck(text, voice):
                     async with session.get(response["path"]) as r:
                         return BytesIO(await r.read())
 
-async def terminate_stale_voice_connections():
-    while True:
-        await asyncio.sleep(5)
-        for k in list(guild_to_voice_client.keys()):
-            v = guild_to_voice_client[k]
-            voice_client, last_used = v
-            if datetime.utcnow() - last_used > timedelta(minutes=10):
-                await voice_client.disconnect()
-                guild_to_voice_client.pop(k)
 
-async def _get_or_create_voice_client(ctx: discord.Interaction):
-    joined = False
-    if ctx.guild.id in guild_to_voice_client:
-        voice_client, _ = guild_to_voice_client[ctx.guild.id]
+async def get_or_create_voice_client(interaction: discord.Interaction):
+    #if users guild id is in voice_client dictionary
+    if interaction.guild.id in guild_to_voice_client:
+        #set variables to the guild id
+        voice_client, _ = guild_to_voice_client[interaction.guild.id]
     else:
-        voice_channel = _context_to_voice_channel(ctx)
+        #else set vc to users voice channel if the user has one
+        voice_channel = context_to_voice_channel(interaction)
+        #if user has no voice channel then voice client is set to None
         if voice_channel is None:
             voice_client = None
         else:
+            #If it is not none we connect Brian to the channel and set joined to True
             voice_client = await voice_channel.connect()
-            joined = True
-    return (voice_client, joined)
+    #return the voice client and bool
+    return (voice_client)
 
-def _context_to_voice_channel(interaction: discord.Interaction):
+def context_to_voice_channel(interaction: discord.Interaction):
+    #return users voice channel if the user is connected to a voice channel. Else returns None
     return interaction.user.voice.channel if interaction.user.voice else None
 
 class QuackTTS(commands.GroupCog, name="quack"):
@@ -83,10 +79,52 @@ class QuackTTS(commands.GroupCog, name="quack"):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"QuackTTS cog is now ready. Synced Globally: {GLOBAL_SYNC}")
+    
+    @app_commands.command(name="join", description="Get TTS Brian to join the call.")
+    async def join_vc(self, interaction: discord.Interaction) -> None:
+        #create and set voice client to voice channel user is connected to
+        voice_client = await get_or_create_voice_client(interaction)
+        #if None we send message informing user
+        if voice_client is None:
+            embed = discord.Embed(title=f"You're not currently connected to a voice channel", colour=discord.Color.from_rgb(255, 0, 0))
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        #voice clients channel id doesnt match the users voice channel id
+        if voice_client.channel.id != interaction.user.voice.channel.id:
+            #store the connected voice channels name
+            old_channel_name = voice_client.channel.name
+            #disconnect the voice client
+            await voice_client.disconnect()
+            #set up new voice client and connect to the users current voice channel
+            voice_client = await interaction.user.voice.channel.connect()
+            #store new voice clients channel name
+            new_channel_name = voice_client.channel.name
+            #add the users guild(server) to dictionary with the voice client and current time
+            guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow())
+            await interaction.response.send_message(f"Switched from #{old_channel_name} to #{new_channel_name}")
+        else:
+            #send message add the users guild(server) to dictionary with the voice client and current time
+            await interaction.response.send_message("Connected to a voice channel")
+            guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow)
+
+
+    @app_commands.command(name="leave", description="Get TTS Brian to leave the call.")
+    async def kick_vc(self, interaction: discord.Interaction) -> None:
+        #if users guild(server) id is in dictionary
+        if interaction.guild.id in guild_to_voice_client:
+            #remove guild from dictionary, disconnect Brian and send message
+            voice_client, _ = guild_to_voice_client.pop(interaction.guild.id)
+            await voice_client.disconnect()
+            embed = discord.Embed(title=f"Disconnected from the voice channel", colour=discord.Color.from_rgb(0, 255, 0))
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        else:
+            embed = discord.Embed(title=f"Brian is not connected to a voice channel", colour=discord.Color.from_rgb(255, 0, 0))
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name="tts", description="Make Brian say whatever you want in a variety of voices")
     async def tts_command(self, interaction: discord.Interaction, voices: str, speech: str) -> None:
-            voice_client, _ = await _get_or_create_voice_client(interaction)
+            voice_client, _ = await get_or_create_voice_client(interaction)
+            
             if self.is_available is True:
                 self.is_available = False
                 try:
@@ -96,33 +134,46 @@ class QuackTTS(commands.GroupCog, name="quack"):
                         audio_data = await query_uberduck(speech, voices)
                         self.is_generating = True
                         with tempfile.NamedTemporaryFile(suffix=".wav", dir=self.cwd, delete=False) as wav_f:
+                            #write audio data to wav_f file
                             wav_f.write(audio_data.getvalue())
                             wav_f.flush()
-                            print(wav_f.name)
+                            #assign source to play
                             source = FFmpegPCMAudio(wav_f.name)
+                            #turn of is_generating
                             self.is_generating = False
-                            await interaction.followup.send("Speech generated. Playing now.")
-
+                            #send message to show generation is complete
+                            embed = discord.Embed(title=f"Speech generation complete. Playing audio now", color=discord.Color.from_rgb(0, 255, 0))
+                            await interaction.followup.send(embed=embed, ephemeral=True)
                         try:
+                            #try clause to catch any errors
+                            #play the source with current voice_client
                             voice_client.play(source, after=None)
+                            #Delay continueing while Brian is playing
                             while voice_client.is_playing():
-                                print("Playing..")
                                 await asyncio.sleep(0.5)
+                        except Exception as e:
+                            embed = discord.Embed(title=f"Encountered Error", description=f"error: `{e}`")
+                            await interaction.followup.send(embed=embed, ephemeral=True)
                         finally:
-                            print("Stopped.")
+                            #proceeds when audio stops and makes Brian available again
                             self.is_available = True
+                            #remove previously generated file
                             os.remove(wav_f.name)
+                            #disconnects Brian automatically
                             voice_client, _ = guild_to_voice_client.pop(interaction.guild.id)
                             await voice_client.disconnect()
-
                     else:
-                        await interaction.followup.send("You're not in a voice channel. Join a voice channel to invite the bot!", ephemeral=True)
+                        embed = discord.Embed(title=f"You're not in a voice channel. Please join a voice channel to use Quack TTS", color=discord.Color.from_rgb(255, 0, 0))
+                        await interaction.followup.send(embed=embed, ephemeral=True)
                         self.is_available = True
                 except Exception as e:
-                    await interaction.followup.send(f"Encountered Error. {e}")
+                    embed = discord.Embed(title=f"Encountered Error", description=f"error: `{e}`")
+                    await interaction.followup.send(embed=embed)
                     self.is_available = True
             else:
-                await interaction.response.send_message("Brians TTS is currently in use.")
+                embed = discord.Embed(title=f"Brians TTS is currently in use.", color=discord.Color.from_rgb(255, 0, 0))
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
 
     @app_commands.command(name="help", description="List all TTS voices")
     async def help_command(self, interaction: discord.Interaction) -> None:
