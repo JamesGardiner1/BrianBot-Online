@@ -1,15 +1,14 @@
-from turtle import color
 import discord
-from discord import app_commands, FFmpegPCMAudio, errors
+from discord import app_commands, FFmpegPCMAudio
 from discord.ext import commands
-from discord.app_commands import Choice
+import discord.app_commands
 from io import BytesIO
 import json
 import time
 import tempfile
 import asyncio
 import aiohttp
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 
 GLOBAL_SYNC = True
