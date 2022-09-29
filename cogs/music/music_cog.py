@@ -6,8 +6,7 @@ from typing import Optional
 import wavelink
 import datetime
 import os
-
-GLOBAL_SYNC = True
+from config import GLOBAL_SYNC
 
 class Music(commands.GroupCog, name="music"):
     def __init__(self, bot: commands.Bot) -> None:

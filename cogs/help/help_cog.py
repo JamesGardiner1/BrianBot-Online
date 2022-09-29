@@ -3,8 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 from typing import Optional, Set
 import os
-
-GLOBAL_SYNC = True
+from config import GLOBAL_SYNC
 
 class MyHelpCommand(commands.MinimalHelpCommand):
     def get_command_signature(self, command):

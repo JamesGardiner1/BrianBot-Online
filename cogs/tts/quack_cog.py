@@ -10,8 +10,7 @@ import asyncio
 import aiohttp
 from datetime import datetime
 import os
-
-GLOBAL_SYNC = True
+from config import GLOBAL_SYNC
 
 API_ROOT = 'https://api.uberduck.ai'
 
@@ -103,7 +102,9 @@ class QuackTTS(commands.GroupCog, name="quack"):
             await interaction.response.send_message(f"Switched from `#{old_channel_name}` to `#{new_channel_name}`")
         else:
             #send message add the users guild(server) to dictionary with the voice client and current time
-            await interaction.response.send_message("Connected to a voice channel")
+            embed = discord.Embed(title=f"Successfully connected to a voice channel", colour=discord.Color.from_rgb(0, 255, 0))
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+            
             guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow)
 
 
@@ -180,7 +181,7 @@ class QuackTTS(commands.GroupCog, name="quack"):
         embed.add_field(name=f"UberDuck AI Help", value="Visit [UberDuck Help Page](https://app.uberduck.ai/quack-help) for a list of voices and how to use them.")
         embed.set_thumbnail(url="https://app.uberduck.ai/_ipx/w_640,q_75/%2Fuberduck-neon.jpg?url=%2Fuberduck-neon.jpg&w=640&q=75")
         embed.set_footer(text="If you encounter any issues use /quack kick and /quack join to restart Brian.")
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:

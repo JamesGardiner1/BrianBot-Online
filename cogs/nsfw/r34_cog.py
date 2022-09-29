@@ -6,8 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import random
 import os
-
-GLOBAL_SYNC = True
+from config import GLOBAL_SYNC
 
 class Nsfw(commands.GroupCog, name="nsfw"):
     def __init__(self, bot: commands.Bot) -> None:

@@ -2,8 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import os
-
-GLOBAL_SYNC = True
+from config import GLOBAL_SYNC
 
 class MyBot(commands.Bot):
     def __init__(self):
