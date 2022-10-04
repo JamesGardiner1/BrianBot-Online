@@ -117,6 +117,8 @@ class QuackTTS(commands.GroupCog, name="quack"):
             await voice_client.disconnect()
             embed = discord.Embed(title=f"Disconnected from the voice channel", colour=discord.Color.from_rgb(0, 255, 0))
             await interaction.response.send_message(embed=embed, ephemeral=True)
+            self.is_available = True
+
         else:
             embed = discord.Embed(title=f"Brian is not connected to a voice channel", colour=discord.Color.from_rgb(255, 0, 0))
             await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -132,15 +134,12 @@ class QuackTTS(commands.GroupCog, name="quack"):
                         guild_to_voice_client[interaction.guild.id] = (voice_client, datetime.utcnow())
                         await interaction.response.defer(thinking=True)
                         audio_data = await query_uberduck(speech, voices)
-                        self.is_generating = True
                         with tempfile.NamedTemporaryFile(suffix=".wav", dir=self.cwd, delete=False) as wav_f:
                             #write audio data to wav_f file
                             wav_f.write(audio_data.getvalue())
                             wav_f.flush()
                             #assign source to play
                             source = FFmpegPCMAudio(wav_f.name)
-                            #turn of is_generating
-                            self.is_generating = False
                             #send message to show generation is complete
                             embed = discord.Embed(title=f"Speech generation complete. Playing audio now", color=discord.Color.from_rgb(0, 255, 0))
                             await interaction.followup.send(embed=embed, ephemeral=True)
