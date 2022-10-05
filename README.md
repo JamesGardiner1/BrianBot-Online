@@ -5,7 +5,7 @@
   <br>
 </h1>
 <div id="banner" align="center">
-    <div class="inline-block" style="padding: 50px 50px 5px 5px;">
+    <div class="inline-block" style="padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px">
         <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/Dalle2Logo.png?raw=true" alt="Dalle 2 Logo" width="32" height="32">
         <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/DalleMiniLogoNew.png?raw=true" alt="Dalle Mini Logo" width="32" height="32">
         <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/UberDuckLogo.png?raw=true" alt="UverDuck AI Logo" width="32" height="32">
