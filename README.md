@@ -6,10 +6,10 @@
 </h1>
 <div id="banner" align="center">
     <div class="inline-block">
-        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/Dalle2Logo.png?raw=true" alt="Dalle 2 Logo" width="32" height="32" style="padding: 20px">
-        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/DalleMiniLogoNew.png?raw=true" alt="Dalle Mini Logo" width="32" height="32" style="padding: 20px">
-        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/UberDuckLogo.png?raw=true" alt="UverDuck AI Logo" width="32" height="32" style="padding: 20px">
-        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/YoutubeLogo.png?raw=true alt="Youtube Logo" width="32" height="32" style="padding: 20px">
+        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/Dalle2Logo.png?raw=true" alt="Dalle 2 Logo" width="32" height="32" style="padding: 0px 0px 5px 5px;">
+        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/DalleMiniLogoNew.png?raw=true" alt="Dalle Mini Logo" width="32" height="32" style="padding: 0px 0px 5px 5px;">>
+        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/UberDuckLogo.png?raw=true" alt="UverDuck AI Logo" width="32" height="32" style="padding: 0px 0px 5px 5px;">>
+        <img src ="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/YoutubeLogo.png?raw=true alt="Youtube Logo" width="32" height="32" style="padding: 0px 0px 5px 5px;">>
     </div>
 </div>
 
