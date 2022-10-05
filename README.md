@@ -3,15 +3,26 @@
   <br>
   BrianBot
   <br>
-  <div id="banner">
-      <div class="inline-block">
-          <a href="https://openai.com/dall-e-2/" src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/Dalle2Logo.png?raw=true" alt="Dalle 2 Logo" width="32" height="32"></a>
-          <a href="https://www.craiyon.com" src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/DalleMiniLogoNew.png?raw=true" alt="Dalle Mini Logo" width="32" height="32"></a>
-          <a href="https://uberduck.ai" src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/UberDuckLogo.png?raw=true" alt="UverDuck AI Logo" width="32" height="32"></a>
-          <a href="https://www.youtube.com" src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/YoutubeLogo.png?raw=true" alt="Youtube Logo" width="32" height="32"></a>
-      </div>
-  </div>
 </h1>
+
+<div id="banner">
+    <div class="inline-block" align="center">
+        <div>
+            <a href="https://openai.com/dall-e-2/">
+                <img src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/Dalle2Logo.png?raw=true" alt="Dalle 2 Logo" width="32" height="32">
+            </a>
+            <a href="https://www.craiyon.com">
+                <img src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/DalleMiniLogoNew.png?raw=true" alt="Dalle Mini Logo" width="32" height="32">
+            </a>
+            <a href="https://uberduck.ai">
+                <img src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/UberDuckLogo.png?raw=true" alt="UverDuck AI Logo" width="32" height="32">
+            </a>
+            <a href="https://www.youtube.com">
+                <img src="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/YoutubeLogo.png?raw=true" alt="Youtube Logo" width="32" height="32">
+            </a>
+        </div>
+    </div>
+</div>
 
 <h3 align=center>A personalised bot for music commands, AI image and speech generation and more. Built with <a href=https://github.com/Rapptz/discord.py>discord.py</a></h3>
 
