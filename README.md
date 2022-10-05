@@ -22,7 +22,7 @@ An official BrianBot server will soon be created for anyone to join, but in the 
 
 **5** command categories containing a variety of commands
 
-*   🖼  **AI Images**: `dalle`, `deepai`
+*   🖼  **AI Images**: `dalle`, `deepai`, `dalle2`
 *   🎵  **Music**: `play`, `queue`, `seek`, `search`, `volume`, `loop` and many more!
 *   🔞  **NSFW**: `r34`
 *   🗣️  **Quack**: `tts`, `help`
