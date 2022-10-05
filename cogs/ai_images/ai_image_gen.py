@@ -41,7 +41,6 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         self.bot = bot
         self.dalle2_id_list = []
         self.credentials = dict()
-        self.credentials[153945414683328513] = ["jamesgardiner1@live.co.uk", "BlueGollie2008"]
         super().__init__()
 
     @commands.Cog.listener()
