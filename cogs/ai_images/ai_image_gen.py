@@ -416,7 +416,10 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         await msg.edit(embed=embed)
         if images is None:
             embed = discord.Embed(title=f"Error Encountered!", description="Sorry! Brian encountered an error while fetching your images, please try again", color=discord.Color.from_rgb(255, 0, 0))
-            return await interaction.followup.send(embed=embed)
+            return await interaction.followup.send(embed=embed, ephemeral=True)
+        if images is "Content Policy Warning":
+            embed = discord.Embed(title=f"Error Encountered!", description="Sorry! Your prompt breaks some of Dalle 2's content policy rules, please try a different prompt", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.followup.send(embed=embed, ephemeral=True)
         else:
             # Send embeded discord message with the generated IMG's URL 
             embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
@@ -497,7 +500,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         #Add user ID to list when generation starts to stop multiple generation requests
         self.dalle2_id_list.append(user_id)
-        
+
         time.sleep(3)
         warning_check = driver.find_element(By.XPATH, CONTENT_POLICY_WARNING)
 
