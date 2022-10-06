@@ -386,18 +386,18 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
     ])
     async def dalle2_command(self, interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
         if interaction.user.id not in self.credentials:
-            await interaction.response.send_message("No Dalle 2 information registered. Please check your DM's to set up your account")
+            embed = discord.Embed(title=f"No Dalle 2 information registered. Please check your DM's to set up your account", color=discord.Color.from_rgb(255, 0, 0))
+            await interaction.response.send_message(embed=embed, ephemeral=True)
             return await self.register_new(interaction)
         
         if interaction.user.id in self.dalle2_id_list:
             embed = discord.Embed(title="Please wait for your current DALL-E 2 image to complete", color=discord.Color.from_rgb(255, 0, 0))
-            return await interaction.response.send_message(embed=embed)
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             if artist is not None:
                 prompt += f", by {artist}"
             if style is not None:
                 prompt += f", in the style of {style}"
-            #self.dalle2_id_list.append(interaction.user.id)
             await self.execute_dalle2(interaction, prompt)
     
     async def execute_dalle2(self, interaction: discord.Interaction, prompt: str):
@@ -411,7 +411,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         # Get last sent message id so we can edit/delete when generation complete
         msg = await interaction.followup.send(embed=embed)
 
-        images = await self.wait_for_loading(prompt, self.credentials[interaction.user.id][0], self.credentials[interaction.user.id][1], interaction.user.id)
+        images = await self.wait_for_loading(interaction, prompt, self.credentials[interaction.user.id][0], self.credentials[interaction.user.id][1], interaction.user.id)
 
         await msg.edit(embed=embed)
         if images is None:
@@ -428,7 +428,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
     # Use decorator to wrap long-running blocking code
     @wrap
-    def wait_for_loading(self, prompt, email, password, user_id):
+    def wait_for_loading(self, interaction: discord.Interaction, prompt, email, password, user_id):
         #Dalle2 Information
         LOGIN_BUTTON = "//*[contains(text(), 'Log in')]"
         LOGIN_CONTINUE_BUTTON = "/html/body/main/section/div/div/div/form/div[2]/button"
@@ -436,6 +436,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         GENERATE_BTN = '//*[@id="root"]/div[1]/div/div/div/div/div[2]/form/button/span/span'
 
         LOADING_BAR = '//*[@id="root"]/div[1]/div/div/div[1]/div/div/div/div[2]/div/div[1]'
+        CONTENT_POLICY_WARNING = "//*[contains(text(), 'It looks like this request may not follow our')]"
 
         IMAGE_1_SRC = '/html/body/div[1]/div[1]/div/div/div[1]/div/div/div/div[2]/div[1]/div[1]/div/div/a/div/img'
         IMAGE_2_SRC = '/html/body/div[1]/div[1]/div/div/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/a/div/img'
@@ -496,27 +497,21 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         #Add user ID to list when generation starts to stop multiple generation requests
         self.dalle2_id_list.append(user_id)
+        
+        time.sleep(3)
+        warning_check = driver.find_element(By.XPATH, CONTENT_POLICY_WARNING)
 
-        # Loading element precense is checked to ensure generation has started.
+        if warning_check is not None:
+            return "Content Policy Warning"
+
         try:
-            print("In loading section")
+            print("Content policy not broken")
             WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, LOADING_BAR)))
             print("Loading element found.")
-
             # When images pop up we know generation has completed
             WebDriverWait(driver, 180).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
-            print("Loading stopped.")
-        except TimeoutException:
-            self.dalle2_id_list.remove(user_id)
-            return print("Could not find loading element in time.")
-        except ElementClickInterceptedException:
-            self.dalle2_id_list.remove(user_id)
-            return print("Element Click Intercepted Exception Raised.")
-        except UnexpectedAlertPresentException:
-            self.dalle2_id_list.remove(user_id)
-            return print("Unexpected Alart Present")
+            print("Loading stopped. Pictures found")
 
-        try:
             WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
             time.sleep(3)
             image1 = driver.find_element(By.XPATH, IMAGE_1_SRC).get_attribute("src")
@@ -548,7 +543,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             driver.close()
             images = [image1, image2, image3, image4]
             self.dalle2_id_list.remove(user_id)
-            return images
+            
+        return images
 
     async def register_new(self, interaction: discord.Interaction) -> None:
         dm = await interaction.user.send("Do you have a Dalle 2 account registered?")
@@ -589,7 +585,6 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             if reaction[0].emoji == '❌':
                 return await interaction.user.send("Please visit [DALLE 2's website](https://openai.com/dall-e-2/) to create an account first")
 
-    
     async def update_info(self, interaction: discord.Interaction) -> None:
         dm = await interaction.user.send("Please type your new Dalle 2 email.")
         email_response = await self.bot.wait_for("message", timeout=20.0)
