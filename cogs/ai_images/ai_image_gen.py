@@ -498,14 +498,14 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         element = driver.find_element(By.XPATH, GENERATE_BTN)
         driver.execute_script("arguments[0].click();", element)
 
-        #Add user ID to list when generation starts to stop multiple generation requests
-        self.dalle2_id_list.append(user_id)
-
         time.sleep(3)
         warning_check = driver.find_element(By.XPATH, CONTENT_POLICY_WARNING)
 
         if warning_check is not None:
             return "Content Policy Warning"
+
+        #Add user ID to list when generation starts to stop multiple generation requests
+        self.dalle2_id_list.append(user_id)
 
         try:
             print("Content policy not broken")
