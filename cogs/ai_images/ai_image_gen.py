@@ -493,6 +493,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, GENERATE_BTN)))
         element = driver.find_element(By.XPATH, GENERATE_BTN)
         driver.execute_script("arguments[0].click();", element)
+
+        #Add user ID to list when generation starts to stop multiple generation requests
         self.dalle2_id_list.append(user_id)
 
         # Loading element precense is checked to ensure generation has started.
@@ -533,13 +535,13 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         except TimeoutException:
             self.dalle2_id_list.remove(user_id)
-            print("could not find Image")
+            return print("could not find Image")
         except ElementClickInterceptedException:
             self.dalle2_id_list.remove(user_id)
-            print("ElementClickInterceptedException")
+            return print("ElementClickInterceptedException")
         except UnexpectedAlertPresentException:
             self.dalle2_id_list.remove(user_id)
-            print("Unexpected Alert Present")
+            return print("Unexpected Alert Present")
         
         finally:
             # close driver
@@ -548,27 +550,45 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             self.dalle2_id_list.remove(user_id)
             return images
 
-    
     async def register_new(self, interaction: discord.Interaction) -> None:
-        dm = await interaction.user.send("Please type your Dalle 2 email.")
-        email_response = await self.bot.wait_for("message", timeout=30.0)
-        if(email_response.author.id is interaction.user.id):
-            email = await get_msg_content(self, dm, email_response)
-        else:
-            return print("error. Please try again")
+        dm = await interaction.user.send("Do you have a Dalle 2 account registered?")
+        await dm.add_reaction('✔️')
+        await dm.add_reaction('❌')
+
+        def check(response, user):
+            return user == interaction.user and response.emoji in ['✔️', '❌']
         
-        dm = await interaction.user.send("Please type your Dalle 2 password.")
-        password_response = await self.bot.wait_for("message", timeout=30.0)
-        if(password_response.author.id is interaction.user.id):
-            password = await get_msg_content(self, dm, password_response)
+        try:
+            reaction = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+        except asyncio.TimeoutError:
+            embed = discord.Embed(title=f"{interaction.user.name} Didn't react in time",
+                            color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed, ephemeral=True)
         else:
-            return print("error. Please try again")
+            if reaction[0].emoji == '✔️':
+                dm = await interaction.user.send("Perfect! Please type your Dalle 2 email in")
 
-        info = [email.content, password.content]
+                email_response = await self.bot.wait_for("message", timeout=30.0)
+                if(email_response.author.id is interaction.user.id):
+                    email = await get_msg_content(self, dm, email_response)
+                else:
+                    return print("error. Please try again")
+                
+                dm = await interaction.user.send("Please type your Dalle 2 password.")
+                password_response = await self.bot.wait_for("message", timeout=30.0)
+                if(password_response.author.id is interaction.user.id):
+                    password = await get_msg_content(self, dm, password_response)
+                else:
+                    return print("error. Please try again")
 
-        self.credentials[interaction.user.id] = info
+                info = [email.content, password.content]
 
-        return await interaction.user.send(f"All done. Credentials stored")
+                self.credentials[interaction.user.id] = info
+
+                return await interaction.user.send(f"All done. Credentials stored")
+            if reaction[0].emoji == '❌':
+                return await interaction.user.send("Please visit [DALLE 2's website](https://openai.com/dall-e-2/) to create an account first")
+
     
     async def update_info(self, interaction: discord.Interaction) -> None:
         dm = await interaction.user.send("Please type your new Dalle 2 email.")
