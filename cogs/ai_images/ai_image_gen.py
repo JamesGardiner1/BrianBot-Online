@@ -413,15 +413,18 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         images = await self.wait_for_loading(prompt, self.credentials[interaction.user.id][0], self.credentials[interaction.user.id][1], interaction.user.id)
 
-        # Send embeded discord message with the generated IMG's URL 
-        embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
-        embed.set_footer(text="Website Link: https://openai.com/dall-e-2/")
-        await interaction.followup.send(embed=embed)
-        #self.dalle2_id_list.remove(interaction.user.id)
-        embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
         await msg.edit(embed=embed)
-        for image in images:
-            await interaction.followup.send(image)
+        if images is None:
+            embed = discord.Embed(title=f"Error Encountered!", description="Sorry! Brian encountered an error while fetching your images, please try again", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.followup.send(embed=embed)
+        else:
+            # Send embeded discord message with the generated IMG's URL 
+            embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
+            embed.set_footer(text="Website Link: https://openai.com/dall-e-2/")
+            await interaction.followup.send(embed=embed)
+            embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
+            for image in images:
+                await interaction.followup.send(image)
 
     # Use decorator to wrap long-running blocking code
     @wrap
@@ -499,13 +502,16 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             print("Loading element found.")
 
             # When images pop up we know generation has completed
-            WebDriverWait(driver, 90).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
+            WebDriverWait(driver, 180).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
             print("Loading stopped.")
         except TimeoutException:
+            self.dalle2_id_list.remove(user_id)
             return print("Could not find loading element in time.")
         except ElementClickInterceptedException:
+            self.dalle2_id_list.remove(user_id)
             return print("Element Click Intercepted Exception Raised.")
         except UnexpectedAlertPresentException:
+            self.dalle2_id_list.remove(user_id)
             return print("Unexpected Alart Present")
 
         try:
@@ -526,10 +532,13 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             image4 = driver.find_element(By.XPATH, IMAGE_4_SRC).get_attribute("src")
 
         except TimeoutException:
+            self.dalle2_id_list.remove(user_id)
             print("could not find Image")
         except ElementClickInterceptedException:
+            self.dalle2_id_list.remove(user_id)
             print("ElementClickInterceptedException")
         except UnexpectedAlertPresentException:
+            self.dalle2_id_list.remove(user_id)
             print("Unexpected Alert Present")
         
         finally:
