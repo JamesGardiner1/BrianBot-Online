@@ -503,6 +503,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         try:
             warning_check = driver.find_element(By.XPATH, CONTENT_POLICY_WARNING)
+            if warning_check is not None:
+                result = "Content Policy Warning"
         except NoSuchElementException:
             #Add user ID to list when generation starts to stop multiple generation requests
             self.dalle2_id_list.append(user_id)
@@ -546,11 +548,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 driver.close()
                 result = [image1, image2, image3, image4]
                 self.dalle2_id_list.remove(user_id)
-
-        if warning_check is not None:
-            return "Content Policy Warning"
-        else:
-            return result
+                
+        return result
 
     async def register_new(self, interaction: discord.Interaction) -> None:
         dm = await interaction.user.send("Do you have a Dalle 2 account registered?")
