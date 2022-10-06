@@ -11,6 +11,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import ElementNotInteractableException
+from selenium.common.exceptions import NoSuchElementException
 import os
 import uuid
 import cloudinary
@@ -499,55 +500,57 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         driver.execute_script("arguments[0].click();", element)
 
         time.sleep(3)
-        warning_check = driver.find_element(By.XPATH, CONTENT_POLICY_WARNING)
+
+        try:
+            warning_check = driver.find_element(By.XPATH, CONTENT_POLICY_WARNING)
+        except NoSuchElementException:
+            #Add user ID to list when generation starts to stop multiple generation requests
+            self.dalle2_id_list.append(user_id)
+
+            try:
+                print("Content policy not broken")
+                WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, LOADING_BAR)))
+                print("Loading element found.")
+                # When images pop up we know generation has completed
+                WebDriverWait(driver, 180).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
+                print("Loading stopped. Pictures found")
+
+                WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
+                time.sleep(3)
+                image1 = driver.find_element(By.XPATH, IMAGE_1_SRC).get_attribute("src")
+
+                WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_2_SRC)))
+                time.sleep(3)
+                image2 = driver.find_element(By.XPATH, IMAGE_2_SRC).get_attribute("src")
+
+                WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_3_SRC)))
+                time.sleep(3)
+                image3 = driver.find_element(By.XPATH, IMAGE_3_SRC).get_attribute("src")
+
+                WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_4_SRC)))
+                time.sleep(3)
+                image4 = driver.find_element(By.XPATH, IMAGE_4_SRC).get_attribute("src")
+
+            except TimeoutException:
+                self.dalle2_id_list.remove(user_id)
+                return print("could not find Image")
+            except ElementClickInterceptedException:
+                self.dalle2_id_list.remove(user_id)
+                return print("ElementClickInterceptedException")
+            except UnexpectedAlertPresentException:
+                self.dalle2_id_list.remove(user_id)
+                return print("Unexpected Alert Present")
+        
+            finally:
+                # close driver
+                driver.close()
+                result = [image1, image2, image3, image4]
+                self.dalle2_id_list.remove(user_id)
 
         if warning_check is not None:
             return "Content Policy Warning"
-
-        #Add user ID to list when generation starts to stop multiple generation requests
-        self.dalle2_id_list.append(user_id)
-
-        try:
-            print("Content policy not broken")
-            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, LOADING_BAR)))
-            print("Loading element found.")
-            # When images pop up we know generation has completed
-            WebDriverWait(driver, 180).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
-            print("Loading stopped. Pictures found")
-
-            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_1_SRC)))
-            time.sleep(3)
-            image1 = driver.find_element(By.XPATH, IMAGE_1_SRC).get_attribute("src")
-
-            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_2_SRC)))
-            time.sleep(3)
-            image2 = driver.find_element(By.XPATH, IMAGE_2_SRC).get_attribute("src")
-
-            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_3_SRC)))
-            time.sleep(3)
-            image3 = driver.find_element(By.XPATH, IMAGE_3_SRC).get_attribute("src")
-
-            WebDriverWait(driver, 5).until(ec.presence_of_element_located((By.XPATH, IMAGE_4_SRC)))
-            time.sleep(3)
-            image4 = driver.find_element(By.XPATH, IMAGE_4_SRC).get_attribute("src")
-
-        except TimeoutException:
-            self.dalle2_id_list.remove(user_id)
-            return print("could not find Image")
-        except ElementClickInterceptedException:
-            self.dalle2_id_list.remove(user_id)
-            return print("ElementClickInterceptedException")
-        except UnexpectedAlertPresentException:
-            self.dalle2_id_list.remove(user_id)
-            return print("Unexpected Alert Present")
-        
-        finally:
-            # close driver
-            driver.close()
-            images = [image1, image2, image3, image4]
-            self.dalle2_id_list.remove(user_id)
-            
-        return images
+        else:
+            return result
 
     async def register_new(self, interaction: discord.Interaction) -> None:
         dm = await interaction.user.send("Do you have a Dalle 2 account registered?")
