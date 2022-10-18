@@ -3,7 +3,6 @@ from discord import Interaction, app_commands
 from discord.ext import commands, tasks
 from discord.app_commands import Choice
 from typing import Optional
-from pyparsing import col
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
