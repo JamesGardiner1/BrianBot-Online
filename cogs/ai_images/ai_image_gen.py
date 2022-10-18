@@ -562,53 +562,84 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         try:
             reaction = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
         except asyncio.TimeoutError:
-            embed = discord.Embed(title=f"{interaction.user.name} Didn't react in time",
-                            color=discord.Color.from_rgb(255, 0, 0))
-            return await interaction.user.send(embed=embed, ephemeral=True)
+            embed = discord.Embed(title="Unfortunately you didn't respond in time. Please run the command to try again", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed)
         else:
             if reaction[0].emoji == '✔️':
-                dm = await interaction.user.send("Perfect! Please type your DALL·E 2 email...")
+                embed = discord.Embed(title="Perfect! Please type your DALL·E 2 email...", color=discord.Color.from_rgb(255, 255, 255))
+                dm = await interaction.user.send(embed=embed)
 
-                email_response = await self.bot.wait_for("message", timeout=30.0)
+                try:
+                    email_response = await self.bot.wait_for("message", timeout=30.0)
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Unfortunately you didn't respond in time. Please run the command to try again", color=discord.Color.from_rgb(255, 0, 0))
+                    return await interaction.user.send(embed=embed)
+
+
                 if(email_response.author.id is interaction.user.id):
                     email = await get_msg_content(self, dm, email_response)
                 else:
-                    return await interaction.user.send("Sorry there was an error. Please try again.")
+                    embed = discord.Embed(title="Sorry I run into an error. Please try again.", color=discord.Color.from_rgb(255, 0, 0))
+                    return await interaction.user.send(embed=embed)
                 
-                dm = await interaction.user.send("Please type your DALL·E 2 password...")
-                password_response = await self.bot.wait_for("message", timeout=30.0)
+                embed = discord.Embed(title="Please type your DALL·E 2 password...", color=discord.Color.from_rgb(255, 255, 255))
+                dm = await interaction.user.send(embed=embed)
+
+                try:
+                    password_response = await self.bot.wait_for("message", timeout=30.0)
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Unfortunately you didn't respond in time. Please run the command to try again", color=discord.Color.from_rgb(255, 0, 0))
+                    return await interaction.user.send(embed=embed)
+
                 if(password_response.author.id is interaction.user.id):
                     password = await get_msg_content(self, dm, password_response)
                 else:
-                    return await interaction.user.send("Sorry there was an error. Please try again.")
+                    embed = discord.Embed(title="Sorry I run into an error. Please try again.", color=discord.Color.from_rgb(255, 0, 0))
+                    return await interaction.user.send(embed=embed)
 
                 info = [email.content, password.content]
 
                 self.credentials[interaction.user.id] = info
 
-                return await interaction.user.send("Credentials Stored! You should now be able to use the DALL·E 2 command.")
+                embed = discord.Embed(title="Credentials Stored! You should now be able to use the DALL·E 2 command", color=discord.Color.from_rgb(0, 255, 0))
+                return await interaction.user.send(embed=embed)
             if reaction[0].emoji == '❌':
                 embed = discord.Embed(title="Create DALL·E 2 Account", description="Please visit [DALL·E 2's website](https://openai.com/dall-e-2/) to create an acccount", color=discord.Color.from_rgb(255, 255, 255))
                 return await interaction.user.send(embed=embed)
 
     async def update_info(self, interaction: discord.Interaction) -> None:
-        dm = await interaction.user.send("Please type your DALL·E 2 email...")
-        email_response = await self.bot.wait_for("message", timeout=20.0)
+        embed = discord.Embed(title="Please type your DALL·E 2 email...", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
+        try:
+            email_response = await self.bot.wait_for("message", timeout=30.0)
+        except asyncio.TimeoutError:
+            embed = discord.Embed(title="Unfortunately you didn't respond in time. Please run the command to try again", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed)
+
         if(email_response.author.id is interaction.user.id):
             email = await get_msg_content(self, dm, email_response)
         else:
-            return await interaction.user.send("Sorry there was an error. Please try again.")
+            embed = discord.Embed(title="Sorry I run into an error. Please try again.", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed)
         
-        dm = await interaction.user.send("Please type your DALL·E 2 password...")
-        password_response = await self.bot.wait_for("message", timeout=20.0)
+        embed = discord.Embed(title="Please type your DALL·E 2 password...", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
+        try:
+            password_response = await self.bot.wait_for("message", timeout=30.0)
+        except asyncio.TimeoutError:
+            embed = discord.Embed(title="Unfortunately you didn't respond in time. Please run the command to try again", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed)
+
         if(password_response.author.id is interaction.user.id):
             password = await get_msg_content(self, dm, password_response)
         else:
-            return await interaction.user.send("Sorry there was an error. Please try again.")
+            embed = discord.Embed(title="Sorry I run into an error. Please try again.", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed)
 
         info = [email.content, password.content]
         
-        dm = await interaction.user.send("Are you sure you want to update your account information with these?")
+        embed = discord.Embed(title="Are you sure you want to update your account information with these?", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
 
         await dm.add_reaction('✔️')
         await dm.add_reaction('❌')
@@ -619,12 +650,14 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         try:
             reaction = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
         except asyncio.TimeoutError:
-            return await interaction.user.send("Sorry! You didn't react in time. Please try again")
+            embed = discord.Embed(title="Sorry! You didn't react in time. Please try again", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.user.send(embed=embed)
         else:
             if reaction[0].emoji == '✔️':
                 self.credentials.pop(interaction.user.id)
                 self.credentials[interaction.user.id] = info
-                return await interaction.user.send("Account information successfully updated!")
+                embed = discord.Embed(title="Account information successfully updated!")
+                return await interaction.user.send(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:
