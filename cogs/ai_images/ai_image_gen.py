@@ -105,7 +105,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 prompt += f", by {artist}"
             if style is not None:
                 prompt += f", in the style of {style}"
-            self.id_list.append(interaction.user.id)
+            self.dalle_id_list.append(interaction.user.id)
             await self.execute_dalle(interaction, prompt)
     
     async def execute_dalle(self, interaction: discord.Interaction, prompt: str):
@@ -163,7 +163,6 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
-        INPUT_FIELD = "prompt"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
         POPUP_REJECT_ALL = "/html/body/div[1]/div/div/div/div[2]/div/button[2]"
         VIDEO_POPUP_EXIT = "//*[@id='av-close-btn']"
