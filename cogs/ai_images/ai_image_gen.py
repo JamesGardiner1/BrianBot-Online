@@ -3,6 +3,7 @@ from discord import Interaction, app_commands
 from discord.ext import commands, tasks
 from discord.app_commands import Choice
 from typing import Optional
+from pyparsing import col
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -551,7 +552,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         return result
 
     async def register_new(self, interaction: discord.Interaction) -> None:
-        dm = await interaction.user.send("Do you have a Dalle 2 account registered?")
+        embed = discord.Embed(title="Do you have a DALL·E 2 account registered?", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
         await dm.add_reaction('✔️')
         await dm.add_reaction('❌')
 
@@ -566,7 +568,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             return await interaction.user.send(embed=embed, ephemeral=True)
         else:
             if reaction[0].emoji == '✔️':
-                dm = await interaction.user.send("Perfect! Please type your Dalle 2 email in")
+                embed = discord.Embed(title="Perfect! Please type your DALL·E 2 email in...", color=discord.Color.from_rgb(255, 255, 255))
+                dm = await interaction.user.send(embed=embed)
 
                 email_response = await self.bot.wait_for("message", timeout=30.0)
                 if(email_response.author.id is interaction.user.id):
@@ -574,7 +577,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 else:
                     return print("error. Please try again")
                 
-                dm = await interaction.user.send("Please type your Dalle 2 password.")
+                embed = discord.Embed(title="Please type your DALL·E 2 password", color=discord.Color.from_rgb(255, 255, 255))
+                dm = await interaction.user.send(embed=embed)
                 password_response = await self.bot.wait_for("message", timeout=30.0)
                 if(password_response.author.id is interaction.user.id):
                     password = await get_msg_content(self, dm, password_response)
@@ -585,19 +589,23 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
                 self.credentials[interaction.user.id] = info
 
-                return await interaction.user.send(f"All done. Credentials stored")
+                embed = discord.Embed(title="Credentials Stored!", description="You're all done! You should now be able to use the DALL·E 2 command.", color=discord.Color.from_rgb(0, 255, 0))
+                return await interaction.user.send(embed=embed)
             if reaction[0].emoji == '❌':
-                return await interaction.user.send("Please visit [DALLE 2's website](https://openai.com/dall-e-2/) to create an account first")
+                embed = discord.Embed(title="Create DALL·E 2 Account", description="Please visit [DALL·E 2's website](https://openai.com/dall-e-2/) to create an acccount", color=discord.Color.from_rgb(255, 255, 255))
+                return await interaction.user.send(embed=embed)
 
     async def update_info(self, interaction: discord.Interaction) -> None:
-        dm = await interaction.user.send("Please type your new Dalle 2 email.")
+        embed = discord.Embed(title="Please type your DALL·E 2 email in...", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
         email_response = await self.bot.wait_for("message", timeout=20.0)
         if(email_response.author.id is interaction.user.id):
             email = await get_msg_content(self, dm, email_response)
         else:
             return print("error. Please try again")
         
-        dm = await interaction.user.send("Please type your new Dalle 2 password.")
+        embed = discord.Embed(title="Please type your DALL·E 2 password in...", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
         password_response = await self.bot.wait_for("message", timeout=20.0)
         if(password_response.author.id is interaction.user.id):
             password = await get_msg_content(self, dm, password_response)
@@ -606,7 +614,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         info = [email.content, password.content]
         
-        dm = await interaction.user.send("Are you sure you want to update your account information with these?")
+        embed = discord.Embed(title="Are you sure you want to update your account information with these?", color=discord.Color.from_rgb(255, 255, 255))
+        dm = await interaction.user.send(embed=embed)
 
         await dm.add_reaction('✔️')
         await dm.add_reaction('❌')
@@ -624,7 +633,8 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             if reaction[0].emoji == '✔️':
                 self.credentials.pop(interaction.user.id)
                 self.credentials[interaction.user.id] = info
-                return await interaction.user.send("Account information updated")
+                embed = discord.Embed(title="Account information successfully updated!", color=discord.Color.from_rgb(0, 255, 0))
+                return await interaction.user.send(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:
