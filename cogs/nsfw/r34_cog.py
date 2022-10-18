@@ -26,6 +26,10 @@ class Nsfw(commands.GroupCog, name="nsfw"):
         __**Example:**__
         ```=r34 spongebob squarepants```
         """
+        if not interaction.channel.is_nsfw():
+            embed = discord.Embed(title="This command can only be used in NSFW/18+ channels", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.response.send_message(embed=embed)
+
         #Variables used for searching
         results = []
         main_url = "https://rule34.xxx/"
