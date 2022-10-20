@@ -1,3 +1,4 @@
+from tkinter import N
 import discord
 from discord import InteractionResponded, NotFound, app_commands, errors
 from discord.ext import commands
@@ -473,6 +474,11 @@ class Music(commands.GroupCog, name="music"):
                             color=discord.Color.from_rgb(255, 255, 255))
             return await interaction.response.send_message(embed=embed)
         
+    #@app_commands.command(name="help", description="Get help with Bot Brians music commands")
+    #async def music_help_command(self, interaction: discord.Interaction) -> None:
+    #    embed = discord.Embed(title="Music Commands", description="List all Bot Brian Music Commands", color=discord.Color.from_rgb(0, 255, 0))
+    #    cog = self.bot.get_cog()
+
     def get_player(self, obj):
         if isinstance(obj, commands.Context):
             return self.bot.wavelink.get_player(obj.guild.id, cls=wavelink.Player, context=obj)
