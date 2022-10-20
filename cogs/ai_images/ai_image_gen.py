@@ -37,10 +37,10 @@ async def get_msg_content(self, dm: discord.Message, msg_response: discord.Messa
 
 class AIImageGen(commands.GroupCog, name="ai_images"):
     def __init__(self, bot: commands.Bot) -> None:
-        self.dalle_id_list = []
-        self.cwd = os.getcwd()
         self.bot = bot
+        self.dalle_id_list = []
         self.dalle2_id_list = []
+        self.cwd = os.getcwd()
         self.credentials = dict()
         super().__init__()
 
@@ -48,7 +48,10 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
     async def on_ready(self):
         print(f"AI Image Generation cog is now ready. Synced Globally: {GLOBAL_SYNC}")
     
-    @app_commands.command(name="dalle", description="Generate images from a prompt using Dalle AI")
+    #
+    #   DALLE Mini
+    #
+    @app_commands.command(name="dalle", description="Generate images from a prompt using DALL·E Mini AI")
     @app_commands.choices(artist=[
         Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
         Choice(name="Michelangelo", value="Michelangelo"), 
@@ -119,7 +122,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         )
 
         # Send embeded message to discord stating the image generation has started
-        embed = discord.Embed(title=f"Generating DALL-E Image now! {loading_emoji}", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
+        embed = discord.Embed(title=f"Generating DALL·E Mini Image now! {loading_emoji}", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
         embed.set_thumbnail(url="https://www.craiyon.com/_app/immutable/assets/craiyon_logo-9927047c.png")
         embed.set_footer(text="Please allow for up to 3 minutes.")
         await interaction.response.defer()
@@ -129,7 +132,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         # Generate unique image name based on author of command
         image_name = f"Dalle_Image_{interaction.user.id}_{str(uuid.uuid4().hex)}.png"
 
-        await self.wait_for_loading(prompt)
+        await self.dalle_wait_for_loading(prompt)
 
         # Find downloaded image in download folder, change name, upload to cloud website while saving it's URL and removing from downloads
         for i in  os.listdir(self.cwd):
@@ -139,7 +142,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 os.remove(f"{self.cwd}/{image_name}")
 
         # Send embeded discord message with the generated IMG's URL 
-        embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
+        embed = discord.Embed(title=f"{interaction.user.name}'s DALL·E Mini Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
         embed.set_footer(text="Website Link: https://www.craiyon.com")
         embed.set_image(url=image_url)
         await interaction.followup.send(embed=embed)
@@ -159,7 +162,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
     # Use decorator to wrap long-running blocking code
     @wrap
-    def wait_for_loading(self, prompt):
+    def dalle_wait_for_loading(self, prompt):
         #Dalle Information
         LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
@@ -243,8 +246,11 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
         # close driver
         driver.close()
-        print("Driver closed. DALL-E img generation complete.")
+        print("Driver closed. DALL·E Mini img generation complete.")
 
+    #
+    #   DEEP AI
+    #
     @app_commands.command(name="deepai", description="Generate an AI image from text prompt with DeepAI")
     async def deepai(self, interaction: discord.Interaction, prompt: str) -> None:
         if interaction.user.id in self.dalle_id_list:
@@ -282,11 +288,14 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
         await msg.edit(embed=embed)
     
+    #
+    #   DALLE 2
+    #
     @app_commands.command(name="dalle2_account_updater", description="Update your dalle 2 account information")
     async def account_updater(self, interaction: discord.Interaction) -> None:
         if interaction.user.id not in self.credentials:
             await interaction.response.defer()
-            embed = discord.Embed(title=f"No Dalle 2 information found.\n\nWould you like to add your account information now?", color=discord.Color.from_rgb(255, 0, 0))
+            embed = discord.Embed(title=f"No DALL·E 2 information found.\n\nWould you like to add your account information now?", color=discord.Color.from_rgb(255, 0, 0))
             message = await interaction.followup.send(embed=embed, ephemeral=True)
             await message.add_reaction('✔️')
             await message.add_reaction('❌')
@@ -302,14 +311,14 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 return await interaction.followup.send(embed=embed, ephemeral=True)
             else:
                 if reaction[0].emoji == '✔️':
-                    embed = discord.Embed(title="Please check your DM's to update your Dalle 2 account information", color=discord.Color.from_rgb(255, 255, 255))
+                    embed = discord.Embed(title="Please check your DM's to update your DALL·E 2 account information", color=discord.Color.from_rgb(255, 255, 255))
                     await interaction.followup.send(embed=embed, ephemeral=True)
                     await self.register_new(interaction)
         else:
             embed = discord.Embed(title=f"Please check your DM's to update your account information", color=discord.Color.from_rgb(255, 255, 255))
             await self.update_info(interaction)
 
-    @app_commands.command(name="dalle2_account_checker", description="Check if Brian has your dalle 2 account information")
+    @app_commands.command(name="dalle2_account_checker", description="Check if Brian has your DALL·E 2 account information")
     async def account_checker(self, interaction: discord.Interaction) -> None:
         if interaction.user.id not in self.credentials:
             await interaction.response.defer()
@@ -336,7 +345,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             embed = discord.Embed(title=f"We have your Dalle 2 information stored, {interaction.user.name}!\nemail: {self.credentials[interaction.user.id][0]}\npassword: {self.credentials[interaction.user.id][1]}", color=discord.Color.from_rgb(0, 255, 0))
             return await interaction.response.send_message(embed=embed, ephemeral=True)
     
-    @app_commands.command(name="dalle2", description="Create AI art with Dalle2")
+    @app_commands.command(name="dalle2", description="Create AI art with DALL·E 2")
     @app_commands.choices(artist=[
     Choice(name="Leonardo da Vinci", value="Leonardo da Vinci"), 
     Choice(name="Michelangelo", value="Michelangelo"), 
@@ -386,12 +395,12 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
     ])
     async def dalle2_command(self, interaction: discord.Interaction, prompt: str, artist: Optional[str] = None, style: Optional[str] = None) -> None:
         if interaction.user.id not in self.credentials:
-            embed = discord.Embed(title=f"No Dalle 2 information registered. Please check your DM's to set up your account", color=discord.Color.from_rgb(255, 0, 0))
+            embed = discord.Embed(title=f"No DALL·E 2 information registered. Please check your DM's to set up your account", color=discord.Color.from_rgb(255, 0, 0))
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return await self.register_new(interaction)
         
         if interaction.user.id in self.dalle2_id_list:
-            embed = discord.Embed(title="Please wait for your current DALL-E 2 image to complete", color=discord.Color.from_rgb(255, 0, 0))
+            embed = discord.Embed(title="Please wait for your current DALL·E 2 image to complete", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             if artist is not None:
@@ -404,14 +413,14 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         loading_emoji = self.bot.get_emoji(997263536076107827)
 
         # Send embeded message to discord stating the image generation has started
-        embed = discord.Embed(title=f"Generating DALL-E 2 Image now! {loading_emoji}", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
+        embed = discord.Embed(title=f"Generating DALL·E 2 Image now! {loading_emoji}", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
         embed.set_thumbnail(url="https://openai.com/content/images/2022/05/twitter-1.png")
         embed.set_footer(text="Please allow for up to 90 seconds.")
         await interaction.response.defer()
         # Get last sent message id so we can edit/delete when generation complete
         msg = await interaction.followup.send(embed=embed)
 
-        images = await self.wait_for_loading(interaction, prompt, self.credentials[interaction.user.id][0], self.credentials[interaction.user.id][1], interaction.user.id)
+        images = await self.dalle2_wait_for_loading(interaction, prompt, self.credentials[interaction.user.id][0], self.credentials[interaction.user.id][1], interaction.user.id)
 
         await msg.edit(embed=embed)
         if images is None:
@@ -422,7 +431,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
             return await interaction.followup.send(embed=embed, ephemeral=True)
         else:
             # Send embeded discord message with the generated IMG's URL 
-            embed = discord.Embed(title=f"{interaction.user.name}'s Dalle Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
+            embed = discord.Embed(title=f"{interaction.user.name}'s DALL·E 2 Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
             embed.set_footer(text="Website Link: https://openai.com/dall-e-2/")
             await interaction.followup.send(embed=embed)
             embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
@@ -431,7 +440,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
 
     # Use decorator to wrap long-running blocking code
     @wrap
-    def wait_for_loading(self, interaction: discord.Interaction, prompt, email, password, user_id):
+    def dalle2_wait_for_loading(self, interaction: discord.Interaction, prompt, email, password, user_id):
         #Dalle2 Information
         LOGIN_BUTTON = "//*[contains(text(), 'Log in')]"
         LOGIN_CONTINUE_BUTTON = "/html/body/main/section/div/div/div/form/div[2]/button"
