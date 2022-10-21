@@ -1,4 +1,3 @@
-from tkinter import N
 import discord
 from discord import InteractionResponded, NotFound, app_commands, errors
 from discord.ext import commands
