@@ -8,6 +8,12 @@ import random
 import os
 from config import GLOBAL_SYNC
 
+commandExamples = dict()
+commandExamples = {
+    "r34" : "/nsfw r34 <search>",
+    "help" : "/nsfw help"
+}
+
 class Nsfw(commands.GroupCog, name="nsfw"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -18,14 +24,6 @@ class Nsfw(commands.GroupCog, name="nsfw"):
 
     @app_commands.command(name="r34", description="Returns a random Rule 34 image")
     async def r34_command(self, interaction: discord.Interaction, *, search: str):
-        """Returns a random image from r34 website.
-
-        __**Command:**__
-        ```=r34 <search>```
-
-        __**Example:**__
-        ```=r34 spongebob squarepants```
-        """
         if not interaction.channel.is_nsfw():
             embed = discord.Embed(title="This command can only be used in NSFW/18+ channels", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.response.send_message(embed=embed)
@@ -65,10 +63,20 @@ class Nsfw(commands.GroupCog, name="nsfw"):
             for src in content_div.find_all('img'):
                 final_img = src.get('src')
 
-
             await interaction.response.send_message(final_img)
         except AttributeError:
             await interaction.response.send_message(f"No results for: {search}")
+        
+    @app_commands.command(name="help", description="Get help with Bot Brians nsfw commands")
+    async def nsfw_help_command(self, interaction: discord.Interaction) -> None:
+        embed = discord.Embed(title="NSFW Commands", description="List of all Bot Brians nsfw commands with examples", color=discord.Color.from_rgb(0, 255, 0))
+
+        cog = self.bot.get_cog("nsfw")
+        group = cog.app_command
+        for command in group.commands:
+            embed.add_field(name=command.name, value=f"`{command.description}`\n`{commandExamples.get(command.name)}`", inline=False)
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:

@@ -23,6 +23,16 @@ from functools import wraps, partial
 import requests
 from config import GLOBAL_SYNC
 
+commandExamples = dict()
+commandExamples = {
+    "dalle" : "/ai_images dalle <image prompt> OPTIONAL<artist> OPTIONAL<style>",
+    "deepai" : "/ai_images deepai <image prompt>",
+    "dalle2" : "/ai_images dalle2 <image prompt> OPTIONAL<artist> OPTIONAL<style>",
+    "dalle2" : "/ai_images dalle2_account_updater",
+    "dalle2" : "/ai_images dalle2_account_checker",
+    "help" : "/ai_images help"
+}
+
 async def get_msg_content(self, dm: discord.Message, msg_response: discord.Message) -> None:
     if dm.channel.id == msg_response.channel.id:
         channel = self.bot.get_channel(dm.channel.id)
@@ -667,6 +677,17 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 self.credentials[interaction.user.id] = info
                 embed = discord.Embed(title="Account information successfully updated!")
                 return await interaction.user.send(embed=embed)
+    
+    @app_commands.command(name="help", description="Get help with Bot Brians AI Image commands")
+    async def aiimage_help_command(self, interaction: discord.Interaction) -> None:
+        embed = discord.Embed(title="AI Image Generation Commands", description="List of all Bot Brians AI Image generation commands with examples", color=discord.Color.from_rgb(0, 255, 0))
+
+        cog = self.bot.get_cog("ai_images")
+        group = cog.app_command
+        for command in group.commands:
+            embed.add_field(name=command.name, value=f"`{command.description}`\n`{commandExamples.get(command.name)}`", inline=False)
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:

@@ -8,6 +8,23 @@ import datetime
 import os
 from config import GLOBAL_SYNC
 
+commandExamples = dict()
+commandExamples = {
+    "join" : "/music join OPTIONAL<channel name>",
+    "leave" : "/music leave",
+    "play" : "/music play <query>",
+    "stop" : "/music stop",
+    "pause" : "/music pause",
+    "resume" : "/music resume",
+    "volume" : "/music volume <number 0 - 100>",
+    "search" : "/music search <query> OPTIONAL<results 1 - 10>",
+    "seek" : "/music seek <hours> <minutes> <seconds> OR /seek <current>",
+    "loop" : "/music loop",
+    "queue" : "/music queue",
+    "skip" : "/music skip OPTIONAL<all>",
+    "help" : "/music help"
+}
+
 class Music(commands.GroupCog, name="music"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -473,10 +490,16 @@ class Music(commands.GroupCog, name="music"):
                             color=discord.Color.from_rgb(255, 255, 255))
             return await interaction.response.send_message(embed=embed)
         
-    #@app_commands.command(name="help", description="Get help with Bot Brians music commands")
-    #async def music_help_command(self, interaction: discord.Interaction) -> None:
-    #    embed = discord.Embed(title="Music Commands", description="List all Bot Brian Music Commands", color=discord.Color.from_rgb(0, 255, 0))
-    #    cog = self.bot.get_cog()
+    @app_commands.command(name="help", description="Get help with Bot Brians music commands")
+    async def music_help_command(self, interaction: discord.Interaction) -> None:
+        embed = discord.Embed(title="Music Commands", description="List of all Bot Brians music commands with examples", color=discord.Color.from_rgb(0, 255, 0))
+
+        cog = self.bot.get_cog("music")
+        group = cog.app_command
+        for command in group.commands:
+            embed.add_field(name=command.name, value=f"`{command.description}`\n`{commandExamples.get(command.name)}`", inline=False)
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
     def get_player(self, obj):
         if isinstance(obj, commands.Context):

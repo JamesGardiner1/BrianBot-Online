@@ -9,6 +9,14 @@ from typing import Optional
 import re
 from config import GLOBAL_SYNC
 
+commandExamples = dict()
+commandExamples = {
+    "define" : "/dictionaries define <word>",
+    "urban_define" : "/dictionaries urban_define <word> OR <random word TRUE/FALSE>",
+    "help" : "/dictionaries help"
+}
+
+
 class Dictionaries(commands.GroupCog, name="dictionaries"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -82,6 +90,17 @@ class Dictionaries(commands.GroupCog, name="dictionaries"):
         embed.add_field(name="Uploaded By", value=f"```{author}```")
         embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Urban_Dictionary_logo.svg/512px-Urban_Dictionary_logo.svg.png?20180302232617")
         await interaction.response.send_message(embed=embed)
+    
+    @app_commands.command(name="help", description="Get help with Bot Brians dictionary commands")
+    async def dictionaries_help_command(self, interaction: discord.Interaction) -> None:
+        embed = discord.Embed(title="Dictionary Commands", description="List of all Bot Brians dictionary commands with examples", color=discord.Color.from_rgb(0, 255, 0))
+
+        cog = self.bot.get_cog("dictionaries")
+        group = cog.app_command
+        for command in group.commands:
+            embed.add_field(name=command.name, value=f"`{command.description}`\n`{commandExamples.get(command.name)}`", inline=False)
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:

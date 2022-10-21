@@ -26,7 +26,7 @@ class Brian(commands.GroupCog, name="brian"):
             group = cog.app_command
             embed.add_field(name=group.name.upper(), value=f"".join(f"`{command.name}`: {command.description}\n" for command in group.commands), inline=False)
         
-        embed.set_thumbnail(url="https://github.com/JamesGardiner1/BrianBot-Online/blob/main/images/BrianBotProfile.png")
+        embed.set_thumbnail(url="https://raw.githubusercontent.com/JamesGardiner1/BrianBot-Online/main/images/BrianBotProfile.png")
         embed.add_field(name="Bot Brian Socials", value="[GitHub](https://github.com/JamesGardiner1/BrianBot-Online)\n[top.gg](https://top.gg/bot/999392379272441876)\n[Discord Invite Link]"r"(https://discord.com/api/oauth2/authorize?client_id=999392379272441876&permissions=8&scope=bot%20applications.commands)")
         
         await interaction.response.send_message(embed=embed, ephemeral=True)

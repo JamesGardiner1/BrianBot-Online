@@ -16,6 +16,15 @@ API_ROOT = 'https://api.uberduck.ai'
 
 guild_to_voice_client = dict()
 
+commandExamples = dict()
+commandExamples = {
+    "join" : "/quack join",
+    "leave" : "/quack leave",
+    "tts" : "/quack tts <voice> <speech prompt>",
+    "voices" : "/quack voices",
+    "help" : "/quack help"
+}
+
 async def query_uberduck(text, voice):
     max_time = 60
     async with aiohttp.ClientSession() as session:
@@ -173,13 +182,23 @@ class QuackTTS(commands.GroupCog, name="quack"):
                 embed = discord.Embed(title=f"Brians TTS is currently in use.", color=discord.Color.from_rgb(255, 0, 0))
                 await interaction.response.send_message(embed=embed, ephemeral=True)
 
-
-    @app_commands.command(name="help", description="List all TTS voices")
-    async def help_command(self, interaction: discord.Interaction) -> None:
+    @app_commands.command(name="voices", description="List all TTS voices")
+    async def list_voices_command(self, interaction: discord.Interaction) -> None:
         embed = discord.Embed(title=f"UbderDuck Quack Help", color=discord.Color.from_rgb(0, 255, 0))
         embed.add_field(name=f"UberDuck AI Help", value="Visit [UberDuck Help Page](https://app.uberduck.ai/quack-help) for a list of voices and how to use them.")
         embed.set_thumbnail(url="https://app.uberduck.ai/_ipx/w_640,q_75/%2Fuberduck-neon.jpg?url=%2Fuberduck-neon.jpg&w=640&q=75")
         embed.set_footer(text="If you encounter any issues use /quack kick and /quack join to restart Brian.")
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+    
+    @app_commands.command(name="help", description="Get help with Bot Brians TTS commands")
+    async def tts_help_command(self, interaction: discord.Interaction) -> None:
+        embed = discord.Embed(title="TTS Commands", description="List of all Bot Brians TTS commands with examples", color=discord.Color.from_rgb(0, 255, 0))
+
+        cog = self.bot.get_cog("quack")
+        group = cog.app_command
+        for command in group.commands:
+            embed.add_field(name=command.name, value=f"`{command.description}`\n`{commandExamples.get(command.name)}`", inline=False)
+        
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
