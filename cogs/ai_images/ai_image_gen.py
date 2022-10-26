@@ -118,7 +118,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 prompt += f", by {artist}"
             if style is not None:
                 prompt += f", in the style of {style}"
-            self.dalle_id_list.append(interaction.user.id)
+            #self.dalle_id_list.append(interaction.user.id)
             await self.execute_dalle(interaction, prompt)
     
     async def execute_dalle(self, interaction: discord.Interaction, prompt: str):
@@ -151,12 +151,13 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 image_url = cloudinary.uploader.upload_image(f"{self.cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
                 os.remove(f"{self.cwd}/{image_name}")
 
+        
         # Send embeded discord message with the generated IMG's URL 
         embed = discord.Embed(title=f"{interaction.user.name}'s DALL·E Mini Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
         embed.set_footer(text="Website Link: https://www.craiyon.com")
         embed.set_image(url=image_url)
         await interaction.followup.send(embed=embed)
-        self.dalle_id_list.remove(interaction.user.id)
+        #self.dalle_id_list.remove(interaction.user.id)
         embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
         await msg.edit(embed=embed)
 
