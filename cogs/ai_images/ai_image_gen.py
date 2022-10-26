@@ -118,7 +118,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 prompt += f", by {artist}"
             if style is not None:
                 prompt += f", in the style of {style}"
-            #self.dalle_id_list.append(interaction.user.id)
+            self.dalle_id_list.append(interaction.user.id)
             await self.execute_dalle(interaction, prompt)
     
     async def execute_dalle(self, interaction: discord.Interaction, prompt: str):
@@ -157,7 +157,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         embed.set_footer(text="Website Link: https://www.craiyon.com")
         embed.set_image(url=image_url)
         await msg.edit(embed=embed)
-        #self.dalle_id_list.remove(interaction.user.id)
+        self.dalle_id_list.remove(interaction.user.id)
         #embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
         #await msg.edit(embed=embed)
 
