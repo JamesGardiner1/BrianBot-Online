@@ -1,1 +1,1 @@
-GLOBAL_SYNC = True
+GLOBAL_SYNC = False
