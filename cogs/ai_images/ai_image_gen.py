@@ -151,15 +151,15 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
                 image_url = cloudinary.uploader.upload_image(f"{self.cwd}/{image_name}", folder="Dalle Images/", use_filename = True).url
                 os.remove(f"{self.cwd}/{image_name}")
 
-        
+
         # Send embeded discord message with the generated IMG's URL 
         embed = discord.Embed(title=f"{interaction.user.name}'s DALL·E Mini Search Finished!", description=f"Prompt: {prompt}", color=discord.Color.from_rgb(0, 255, 0))
         embed.set_footer(text="Website Link: https://www.craiyon.com")
         embed.set_image(url=image_url)
-        await interaction.followup.send(embed=embed)
-        #self.dalle_id_list.remove(interaction.user.id)
-        embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
         await msg.edit(embed=embed)
+        #self.dalle_id_list.remove(interaction.user.id)
+        #embed = discord.Embed(title="Images Generated", color=discord.Color.from_rgb(255, 255, 255))
+        #await msg.edit(embed=embed)
 
     # Wrap sync function in async decorator to run concurrently
     def wrap(func):
@@ -437,7 +437,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         if images is None:
             embed = discord.Embed(title=f"Error Encountered!", description="Sorry! Brian encountered an error while fetching your images, please try again", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.followup.send(embed=embed, ephemeral=True)
-        if images is "Content Policy Warning":
+        if images == "Content Policy Warning":
             embed = discord.Embed(title=f"Error Encountered!", description="Sorry! Your prompt breaks some of Dalle 2's content policy rules, please try a different prompt", color=discord.Color.from_rgb(255, 0, 0))
             return await interaction.followup.send(embed=embed, ephemeral=True)
         else:
