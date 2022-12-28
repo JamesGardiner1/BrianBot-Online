@@ -33,7 +33,7 @@ class Music(commands.GroupCog, name="music"):
     
     async def create_nodes(self):
         await self.bot.wait_until_ready()
-        await wavelink.NodePool.create_node(bot=self.bot, host="57.128.136.143", port=30411, password="maybeiwasboring", https=True)
+        await wavelink.NodePool.create_node(bot=self.bot, host="uk.lavalink.platinumhost.uk", port=2333, password="lavalink", https=True)
 
     @commands.Cog.listener()
     async def on_ready(self):
