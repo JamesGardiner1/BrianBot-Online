@@ -43,7 +43,6 @@ An official BrianBot server will soon be created for anyone to join, but in the 
 
 *   🖼  **AI Images**: `dalle`, `deepai`, `dalle2`
 *   🎵  **Music**: `play`, `queue`, `seek`, `search`, `volume`, `loop` and many more!
-*   🔞  **NSFW**: `r34`
 *   🗣️  **Quack**: `tts`, `help`
 *   📚  **Dictionaries**: `define`, `urban_define`
 
@@ -54,7 +53,6 @@ BrianBot has been built on top of the new [Discord Slash Commands](https://disco
 
 BrianBot is at the start of it's development. I hope to introduce additional features such as:
   * Additional music commands and the ability to play from Spotify, Soundcloud etc.
-  * Additional NSFW commands
   * Image manipulation commands
   * Reddit forum searches
   * Role systems, Server Moderation and other Guild/User related commands
