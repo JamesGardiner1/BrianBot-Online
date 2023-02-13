@@ -18,6 +18,7 @@ class MyBot(commands.Bot):
         await self.load_extension(f"cogs.ai_images.ai_image_gen")
         await self.load_extension(f"cogs.tts.quack_cog")
         await self.load_extension(f"cogs.help.help_cog")
+        await self.load_extension(f"cogs.gpt.gpt_cog")
         if GLOBAL_SYNC:
             await bot.tree.sync()
         else:
