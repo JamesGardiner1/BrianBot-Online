@@ -44,7 +44,7 @@ class GPT(commands.GroupCog, name="gpt"):
         if interaction.user.id not in user_ids:
             return await interaction.response.send_message("User cannot use this command")
         
-        interaction.response.defer(thinking=True)
+        await interaction.response.defer(thinking=True)
 
         messages = []
         async for message in interaction.channel.history(limit=amount):
@@ -61,7 +61,7 @@ class GPT(commands.GroupCog, name="gpt"):
         for message in messages:
             print(message.content)
 
-        return await interaction.response.send_message(f"Successfully traced back {amount} messages. List size: {len(messages)}", ephemeral=True)
+        return await interaction.followup.send(f"Successfully traced back {amount} messages. List size: {len(messages)}", ephemeral=True)
 
 
 async def setup(bot: commands.Bot) -> None:
