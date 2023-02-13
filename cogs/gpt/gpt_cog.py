@@ -44,7 +44,8 @@ class GPT(commands.GroupCog, name="gpt"):
         if interaction.user.id not in user_ids:
             return await interaction.response.send_message("User cannot use this command")
         
-        #await interaction.response.defer(thinking=True)
+        await interaction.response.defer()
+        await interaction.followup.send("Collecting data...", ephemeral=True)
 
         messages = []
         async for message in interaction.channel.history(limit=amount):
