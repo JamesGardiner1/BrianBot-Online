@@ -21,6 +21,8 @@ user_ids = [
 class GPT(commands.GroupCog, name="GPT"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
+        super().__init__()
+
 
     @commands.Cog.listener()
     async def on_ready(self):
