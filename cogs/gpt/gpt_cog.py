@@ -5,6 +5,9 @@ from typing import Optional
 from config import GLOBAL_SYNC
 import asyncio
 import os
+import re
+
+url_regex = re.compile("(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))")
 
 user_ids = [
     147651412774486016,
@@ -17,6 +20,13 @@ user_ids = [
     147395879962148864,
     147439193323208704,
     227850389079326720
+]
+
+knwon_junk = [
+    '~play',
+    '~stop',
+    '~rule34',
+    '~skip'
 ]
 
 class GPT(commands.GroupCog, name="gpt"):
@@ -33,8 +43,20 @@ class GPT(commands.GroupCog, name="gpt"):
     async def define(self, interaction: discord.Interaction, user: discord.User,  amount: int) -> None:
         if interaction.user.id not in user_ids:
             return await interaction.response.send_message("User cannot use this command")
+        
+        interaction.response.defer(thinking=True)
 
-        messages = [message async for message in interaction.channel.history(limit=amount) if message.author.id == user.id]
+        messages = []
+        async for message in interaction.channel.history(limit=amount):
+            #if message is not by the person we want then skip
+            if message.author.id != user.id:
+                return
+            #if message is link then skip
+            if re.search(url_regex, message.content) is not None:
+                return
+            
+            messages.append(message.content)
+
 
         for message in messages:
             print(message.content)
