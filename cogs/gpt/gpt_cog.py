@@ -19,7 +19,7 @@ user_ids = [
     227850389079326720
 ]
 
-class GPT(commands.GroupCog, name="GPT"):
+class GPT(commands.GroupCog, name="gpt"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         super().__init__()
