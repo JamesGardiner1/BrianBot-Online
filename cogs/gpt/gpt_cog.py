@@ -4,6 +4,7 @@ from discord.ext import commands
 from typing import Optional
 from config import GLOBAL_SYNC
 import asyncio
+import os
 
 user_ids = [
     147651412774486016,
@@ -36,4 +37,12 @@ class GPT(commands.GroupCog, name="GPT"):
         messages = [message async for message in interaction.channel.history(limit=amount)]
 
         await interaction.response.send_message(f"Successfully traced back {amount} messages. List size: {len(messages)}\n\n {messages}")
+
+async def setup(bot: commands.Bot) -> None:
+    if GLOBAL_SYNC:
+        # Global Sync
+        await bot.add_cog(GPT(bot))
+    else:
+        # Private Sync
+        await bot.add_cog(GPT(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
 
