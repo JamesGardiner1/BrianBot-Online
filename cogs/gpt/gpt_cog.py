@@ -36,7 +36,10 @@ class GPT(commands.GroupCog, name="gpt"):
 
         messages = [message async for message in interaction.channel.history(limit=amount)]
 
-        await interaction.response.send_message(f"Successfully traced back {amount} messages. List size: {len(messages)}\n\n {messages}")
+        print(messages)
+
+        return await interaction.response.send_message(f"Successfully traced back {amount} messages. List size: {len(messages)}", ephemeral=True)
+
 
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:
