@@ -30,13 +30,14 @@ class GPT(commands.GroupCog, name="gpt"):
         print(f"GPT cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
     @app_commands.command(name="history", description="Brian retrieves message history")
-    async def define(self, interaction: discord.Interaction, amount: int) -> None:
+    async def define(self, interaction: discord.Interaction, user: discord.User,  amount: int) -> None:
         if interaction.user.id not in user_ids:
             return await interaction.response.send_message("User cannot use this command")
 
-        messages = [message async for message in interaction.channel.history(limit=amount)]
+        messages = [message async for message in interaction.channel.history(limit=amount) if message.author.id == user.id]
 
-        print(messages)
+        for message in messages:
+            print(message.content)
 
         return await interaction.response.send_message(f"Successfully traced back {amount} messages. List size: {len(messages)}", ephemeral=True)
 
