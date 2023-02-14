@@ -54,7 +54,7 @@ async def query_uberduck(text, voice):
                     async with session.get(response["path"]) as r:
                         return BytesIO(await r.read())
 
-async def get_or_create_voice_client(interaction: discord.Interaction) -> discord.VoiceClient:
+async def get_or_create_voice_client(interaction: discord.Interaction):
     #if users guild id is in voice_client dictionary
     if interaction.guild.id in guild_to_voice_client:
         #set variables to the guild id
@@ -71,7 +71,7 @@ async def get_or_create_voice_client(interaction: discord.Interaction) -> discor
     #return the voice client and bool
     return (voice_client)
 
-def context_to_voice_channel(interaction: discord.Interaction) -> discord.Interaction.user.voice.channel:
+def context_to_voice_channel(interaction: discord.Interaction):
     #return users voice channel if the user is connected to a voice channel. Else returns None
     return interaction.user.voice.channel if interaction.user.voice else None
 
