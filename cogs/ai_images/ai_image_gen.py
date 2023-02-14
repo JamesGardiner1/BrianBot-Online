@@ -175,7 +175,7 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
     @wrap
     def dalle_wait_for_loading(self, prompt):
         #Dalle Information
-        LOADING_ELEMENT = "//*[contains(text(), 'This should not take long (up to 2 minutes)...')]"
+        LOADING_ELEMENT = "/html/body/div[2]/div[1]/main/div/div/div[2]/div[2]/div/div[1]/div[2]/div/div[2]/div/div/div/div[1]/div[2]/lottie-player//div/div/svg/g/g[3]/g[2]/path[2]"
         SCREENSHOT_BUTTON = "//*[contains(text(), 'Screenshot')]"
         RUN_BUTTON = '//*[@id="app"]/div/div/div[1]/button'
         POPUP_REJECT_ALL = "/html/body/div[1]/div/div/div/div[2]/div/button[2]"
