@@ -72,7 +72,7 @@ async def get_or_create_voice_client(interaction: discord.Interaction):
     #return the voice client and bool
     return (voice_client)
 
-def context_to_voice_channel(interaction: discord.Interaction):
+async def context_to_voice_channel(interaction: discord.Interaction):
     #return users voice channel if the user is connected to a voice channel. Else returns None
     return interaction.user.voice.channel if interaction.user.voice else None
 

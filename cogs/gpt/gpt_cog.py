@@ -22,12 +22,16 @@ user_ids = [
     227850389079326720
 ]
 
-knwon_junk = [
+known_junk = [
     '~play',
     '~stop',
     '~rule34',
     '~skip'
 ]
+
+async def process_data() -> None:
+    return
+
 
 class GPT(commands.GroupCog, name="gpt"):
     def __init__(self, bot: commands.Bot) -> None:
@@ -39,30 +43,23 @@ class GPT(commands.GroupCog, name="gpt"):
     async def on_ready(self):
         print(f"GPT cog is now ready. Synced Globally: {GLOBAL_SYNC}")
 
-    @app_commands.command(name="history", description="Brian retrieves message history")
-    async def define(self, interaction: discord.Interaction, user: discord.User,  amount: int) -> None:
+    @app_commands.command(name="create_corpus", description="Brian retrieves message history")
+    async def create_corpus(self, interaction: discord.Interaction, user: discord.User,  amount: int) -> None:
         if interaction.user.id not in user_ids:
             return await interaction.response.send_message("User cannot use this command")
         
-        await interaction.response.defer()
-        await interaction.followup.send("Collecting data...", ephemeral=True)
+        await interaction.response.defer(thinking=True, ephemeral=True)
 
         messages = []
         async for message in interaction.channel.history(limit=amount):
             #if message is not by the person we want then skip
-            if message.author.id != user.id:
-                return
-            #if message is link then skip
-            if re.search(url_regex, message.content) is not None:
-                return
-            
-            messages.append(message.content)
-
+            if re.search(url_regex, message.content) is None:         
+                messages.append(message.content)
 
         for message in messages:
-            print(message.content)
+            print(message)
 
-        return await interaction.response.send_message(f"Successfully traced back {amount} messages. List size: {len(messages)}", ephemeral=True)
+        return await interaction.followup.send(f"Successfully traced back {amount} messages. Corpus Sentence Size: {len(messages)}", ephemeral=True)
 
 
 async def setup(bot: commands.Bot) -> None:

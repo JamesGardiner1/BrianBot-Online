@@ -1,12 +1,6 @@
-from nturl2path import url2pathname
-from unicodedata import name
 import discord
 from discord import app_commands
 from discord.ext import commands
-import re
-import requests
-from bs4 import BeautifulSoup
-import random
 import os
 from config import GLOBAL_SYNC
 
