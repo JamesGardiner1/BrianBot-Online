@@ -33,7 +33,7 @@ class Music(commands.GroupCog, name="music"):
     
     async def create_nodes(self):
         await self.bot.wait_until_ready()
-        await wavelink.NodePool.create_node(bot=self.bot, host="ssl.freelavalink.ga", port=443, password="www.freelavalink.ga", https=True)
+        await wavelink.NodePool.create_node(bot=self.bot, host="ssl.freelavalink.ga", port=443, password="www.freelavalink.ga", https=False)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -42,6 +42,7 @@ class Music(commands.GroupCog, name="music"):
     @commands.Cog.listener()
     async def on_wavelink_node_ready(self, node: wavelink.Node):
         print(f"Wavelink node ready.\n Node <{node.identifier}>")
+
 
     @commands.Cog.listener()
     async def on_wavelink_track_end(self, player: wavelink.Player, track: wavelink.YouTubeTrack, reason):
