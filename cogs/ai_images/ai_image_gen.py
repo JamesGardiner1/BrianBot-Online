@@ -690,6 +690,34 @@ class AIImageGen(commands.GroupCog, name="ai_images"):
         
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
+    @app_commands.command(name="remove_from_list", description="Remove user from DALL·E list so they can generate again in case of error")
+    @app_commands.choices(id_list=[
+    Choice(name="DALL·E mini", value="dalle_id_list"), 
+    Choice(name="DALL·E 2", value="dalle2_id_list")])
+    async def remove_from_list_command(self, interaction: discord.Interaction, user: discord.User, id_list: str):
+        if interaction.user.id != 153945414683328513:
+            embed = discord.Embed(title="Sorry you do not have permission to use this command", color=discord.Color.from_rgb(255, 0, 0))
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        if id_list == "dalle_id_list":
+            if user.id not in self.dalle_id_list:
+                embed = discord.Embed(title=f"No user found in {id_list} list", color=discord.Color.from_rgb(255, 0, 0))
+                return await interaction.response.send_message(embed = embed, ephemeral=True)
+            self.dalle_id_list.remove(user.id)
+            embed = discord.Embed(title=f"User successfully removed from {id_list} list", color=discord.Color.from_rgb(0, 255, 0))
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        if id_list == "dalle2_id_list":
+            if user.id not in self.dalle2_id_list:
+                embed = discord.Embed(title=f"No user found in {id_list} list", color=discord.Color.from_rgb(255, 0, 0))
+                return await interaction.response.send_message(embed = embed, ephemeral=True)
+            self.dalle2_id_list.remove(user.id)
+            embed = discord.Embed(title=f"User successfully removed from {id_list} list", color=discord.Color.from_rgb(0, 255, 0))
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        return await interaction.response.send_message("an error must have occured. Please try again.", ephemeral=True)
+
+
 async def setup(bot: commands.Bot) -> None:
     if GLOBAL_SYNC:
         # Global Sync
