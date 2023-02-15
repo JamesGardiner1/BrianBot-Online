@@ -69,4 +69,3 @@ async def setup(bot: commands.Bot) -> None:
     else:
         # Private Sync
         await bot.add_cog(GPT(bot), guilds=[discord.Object(id=os.environ["DEVELOPMENT_SERVER_ID"])])
-
