@@ -33,7 +33,7 @@ class Music(commands.GroupCog, name="music"):
     
     async def create_nodes(self):
         await self.bot.wait_until_ready()
-        await wavelink.NodePool.create_node(bot=self.bot, host="lavalink.lexnet.cc", port=443, password="lexn3tl@val!nk", https=True)
+        await wavelink.NodePool.create_node(bot=self.bot, host="brianbot-lavalink.herokuapp.com", port=80, password="BrianBotTEEF", https=True)
 
     @commands.Cog.listener()
     async def on_ready(self):
