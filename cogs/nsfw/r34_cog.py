@@ -38,7 +38,8 @@ class Nsfw(commands.GroupCog, name="nsfw"):
         new_search = re.sub('\_\_+', '_', new_search)
         new_search = new_search.lstrip('_')
         url = main_url + search_command + new_search
-        response = requests.get(url)
+        header = {'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'}
+        response = requests.get(url, headers=header)
 
         # store webpage content
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -57,7 +58,7 @@ class Nsfw(commands.GroupCog, name="nsfw"):
 
             # Repeat similar but on the thumbnail image we just found
             # Final src is the full scaled image
-            response = requests.get(image_link)
+            response = requests.get(image_link, headers=header)
             soup = BeautifulSoup(response.content, 'html.parser')
             content_div = soup.find("div", {"class": "flexi"})
             for src in content_div.find_all('img'):
