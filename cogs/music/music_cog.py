@@ -39,7 +39,7 @@ class Music(commands.GroupCog, name="music"):
         await self.bot.wait_until_ready()
 
         node: wavelink.Node = wavelink.Node(
-            uri="lavalink-v4.oryzen.xyz:80", password="oryzen.xyz"
+            uri="212.192.29.91:25529", password="reedrouxv4lavalink"
         )
         await wavelink.NodePool.connect(client=self.bot, nodes=[node])
 
