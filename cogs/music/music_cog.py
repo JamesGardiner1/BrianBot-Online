@@ -34,11 +34,12 @@ class Music(commands.GroupCog, name="music"):
 
     current_channel = -1
 
+    # Create wavelink nodes for track playing
     async def create_nodes(self):
         await self.bot.wait_until_ready()
 
         node: wavelink.Node = wavelink.Node(
-            uri="narco.buses.rocks:2269", password="glasshost1984"
+            uri="lavalink-v4.oryzen.xyz:80", password="oryzen.xyz"
         )
         await wavelink.NodePool.connect(client=self.bot, nodes=[node])
 
